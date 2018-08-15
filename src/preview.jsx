@@ -142,7 +142,7 @@ export default class Preview extends React.Component {
             <FormElementsEdit showCorrectColumn={this.props.showCorrectColumn} files={this.props.files} manualEditModeOff={this.props.manualEditModeOff} preview={this} element={this.props.editElement} updateElement={this.updateElement} />
           }
         </div>
-        <Sortable sensitivity={0} key={this.state.data.length} onSort={this.handleSort.bind(this)}>
+        <Sortable sensitivity={0} key={this.state.data.length} onSort={this.handleSort.bind(this)} direction="vertical" dynamic>
           {items}
         </Sortable>
       </div>

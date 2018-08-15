@@ -1,14 +1,18 @@
 // Variables
-@import "variables";
+@import "variables.css.scss";
+
+// Vendor UI
+@import "sortable.css.scss";
 
 // Component syles
-@import "react-star-rating";
-@import "react-select";
-@import "react-native-slider";
-@import "react-date-picker";
+@import "react-star-rating.css.scss";
+@import "react-select.css.scss";
+@import "react-native-slider.css.scss";
+@import "react-date-picker.css.scss";
 
-@import "react-draft";
+@import "react-draft.css.scss";
 
 // Form builder styles
-@import "form-builder";
-@import "form-builder-form";
+@import "form-builder.css.scss";
+@import "form-builder-form.css.scss";
+

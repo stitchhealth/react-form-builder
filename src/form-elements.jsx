@@ -9,6 +9,7 @@ import StarRating from './star-rating';
 import xss from 'xss';
 import moment from 'moment';
 import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
 
 let FormElements = {};
 let myxss = new xss.FilterXSS({
@@ -30,6 +31,13 @@ let myxss = new xss.FilterXSS({
   }
 });
 
+let Div = createReactClass({
+  render() {
+    const {children, sortHandle, ...props} = this.props;
+    return <div {...props}>{children}</div>
+  }
+});
+
 let Header = createReactClass({
   mixins: [SortableItemMixin],
   render() {
@@ -42,7 +50,7 @@ let Header = createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -52,7 +60,7 @@ let Header = createReactClass({
           </div>
         }
         <h3 className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content) }} />
-      </div>
+      </Div>
     );
   }
 })
@@ -69,7 +77,7 @@ let Paragraph =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -79,7 +87,7 @@ let Paragraph =createReactClass({
           </div>
         }
         <p className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content) }} />
-      </div>
+      </Div>
     );
   }
 })
@@ -95,7 +103,7 @@ let Label =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -105,7 +113,7 @@ let Label =createReactClass({
           </div>
         }
         <label className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content) }} />
-      </div>
+      </Div>
     );
   }
 })
@@ -118,7 +126,7 @@ let LineBreak =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -128,7 +136,7 @@ let LineBreak =createReactClass({
           </div>
         }
         <hr />
-      </div>
+      </Div>
     );
   }
 })
@@ -154,7 +162,7 @@ let TextInput =createReactClass({
     }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -173,7 +181,7 @@ let TextInput =createReactClass({
           </label>
           <input {...props} />
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -199,7 +207,7 @@ let NumberInput =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -218,7 +226,7 @@ let NumberInput =createReactClass({
           </label>
           <input {...props} />
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -243,7 +251,7 @@ let TextArea =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -261,7 +269,7 @@ let TextArea =createReactClass({
           </label>
           <textarea {...props} />
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -346,7 +354,7 @@ let DatePicker =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -397,7 +405,7 @@ let DatePicker =createReactClass({
             }
           </div>
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -422,7 +430,7 @@ let Dropdown =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -445,7 +453,7 @@ let Dropdown =createReactClass({
             })}
           </select>
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -484,7 +492,7 @@ let Signature =createReactClass({
     }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -506,7 +514,7 @@ let Signature =createReactClass({
           }
           <input {...props} />
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -540,7 +548,7 @@ let Tags =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -558,7 +566,7 @@ let Tags =createReactClass({
           </label>
           <Select {...props} />
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -574,7 +582,7 @@ let Checkboxes =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -608,7 +616,7 @@ let Checkboxes =createReactClass({
             )
           })}
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -624,7 +632,7 @@ let RadioButtons =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -658,7 +666,7 @@ let RadioButtons =createReactClass({
             )
           })}
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -672,7 +680,7 @@ let Image =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses} style={style}>
+      <Div className={baseClasses} style={style}>
         { !this.props.mutable &&
           <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} onEdit={this.props.onEdit} required={this.props.data.required} />
         }
@@ -682,7 +690,7 @@ let Image =createReactClass({
         { !this.props.data.src &&
           <div className="no-image">No Image</div>
         }
-      </div>
+      </Div>
     );
   }
 })
@@ -704,7 +712,7 @@ let Rating =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -722,7 +730,7 @@ let Rating =createReactClass({
           </label>
           <StarRating {...props} />
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -734,7 +742,7 @@ let HyperLink =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -746,7 +754,7 @@ let HyperLink =createReactClass({
         <div className="form-group">
           <a target="_blank" href={this.props.data.href}>{this.props.data.content}</a>
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -758,7 +766,7 @@ let Download =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -770,7 +778,7 @@ let Download =createReactClass({
         <div className="form-group">
           <a href={this.props.download_path + '?id=' + this.props.data.file_path}>{this.props.data.content}</a>
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -811,7 +819,7 @@ let Camera =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -850,7 +858,7 @@ let Camera =createReactClass({
 
           </div>
         </div>
-      </div>
+      </Div>
     );
   }
 })
@@ -899,7 +907,7 @@ let Range =createReactClass({
     if (this.props.data.pageBreakBefore) { baseClasses += ' alwaysbreak'; }
 
     return this.renderWithSortable(
-      <div className={baseClasses}>
+      <Div className={baseClasses}>
         { !this.props.mutable &&
           <div>
             { this.props.data.pageBreakBefore &&
@@ -934,10 +942,10 @@ let Range =createReactClass({
             {_datalist}
           </datalist>
         </div>
-      </div>
+      </Div>
     );
   }
-})
+});
 
 
 FormElements.Header = Header;
