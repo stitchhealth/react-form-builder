@@ -4,3 +4,4 @@ components
 example/bundle.js
 example/.git
 .idea/
+build/

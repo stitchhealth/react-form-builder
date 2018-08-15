@@ -1,11 +1,13 @@
+const webpack = require('webpack');
+
 module.exports = {
   entry: {
-    app: ["./src/index.jsx"]
+    app: ['./src/index.jsx'],
   },
 
   output: {
-    path: __dirname + "/lib",
-    filename: "app.js",
+    path: __dirname + '/lib',
+    filename: 'app.js',
     library: 'ReactFormBuilder',
     libraryTarget: 'umd',
   },
@@ -16,29 +18,31 @@ module.exports = {
     'react': 'react',
     'react-dom': 'react-dom',
     'react-datepicker': 'react-datepicker',
-    'react/addons': 'react/addons',
     'classnames': 'classnames',
     'jquery': 'jquery',
-    'bootstrap': 'bootstrap'
+    'bootstrap': 'bootstrap',
   },
 
   module: {
     loaders: [
       {
-        test: /.jsx?$/,
+        test: /\.(js|jsx)$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react']
-        }
+          plugins: ['transform-decorators-legacy'],
+          presets: ['env', 'react', 'stage-2'],
+        },
       },
       {
-        test: /\.scss$/,
-        loader: "style-loader!css-loader!sass-loader"
-      }
-    ]
+        test: /\.(scss|css)$/,
+        exclude: /node_modules/,
+        loader: 'style-loader!css-loader!sass-loader',
+      },
+    ],
   },
+
   resolve: {
-    extensions: ['', '.js', '.json', '.jsx', '.css', '.scss']
-  }
-}
+    extensions: ['.js', '.json', '.jsx', '.css', '.scss'],
+  },
+};
