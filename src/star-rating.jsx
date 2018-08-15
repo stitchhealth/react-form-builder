@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
+import PropTypes from "prop-types";
 
 /**
  * @fileoverview react-star-rating
@@ -253,14 +254,14 @@ export default class StarRating extends React.Component {
 }
 
 StarRating.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  caption: React.PropTypes.string,
-  ratingAmount: React.PropTypes.number.isRequired,
-  rating: React.PropTypes.number,
-  onRatingClick: React.PropTypes.func,
-  disabled: React.PropTypes.bool,
-  editing: React.PropTypes.bool,
-  size: React.PropTypes.string
+  name: PropTypes.string.isRequired,
+  caption: PropTypes.string,
+  ratingAmount: PropTypes.number.isRequired,
+  rating: PropTypes.number,
+  onRatingClick: PropTypes.func,
+  disabled: PropTypes.bool,
+  editing: PropTypes.bool,
+  size: PropTypes.string
 };
 
 StarRating.defaultProps = {

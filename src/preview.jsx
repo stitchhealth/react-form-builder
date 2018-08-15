@@ -3,7 +3,7 @@
   */
 
 import React from 'react';
-import Sortable from 'react-sortable-items';
+import Sortable from 'react-anything-sortable';
 import ElementStore from './stores/ElementStore';
 import ElementActions from './actions/ElementActions';
 import {Header,Paragraph,Label,LineBreak,TextInput,NumberInput,TextArea,Dropdown,Checkboxes,DatePicker,RadioButtons,Image,Rating,Tags,Signature,HyperLink,Download,Camera,Range} from './form-elements';

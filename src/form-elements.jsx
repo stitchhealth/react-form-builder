@@ -2,12 +2,13 @@ import React from 'react';
 import HeaderBar from './header-bar';
 import Select from 'react-select';
 import SignaturePad from 'react-signature-pad';
-import SortableItemMixin from 'react-sortable-items/SortableItemMixin';
-import SliderNativeBootstrap from 'react-bootstrap-native-slider';
+import {SortableItemMixin} from 'react-anything-sortable';
+import ReactBootstrapSlider from 'react-bootstrap-slider';
 import ReactDatePicker from 'react-datepicker';
 import StarRating from './star-rating';
 import xss from 'xss';
 import moment from 'moment';
+import createReactClass from 'create-react-class';
 
 let FormElements = {};
 let myxss = new xss.FilterXSS({
@@ -29,7 +30,7 @@ let myxss = new xss.FilterXSS({
   }
 });
 
-let Header = React.createClass({
+let Header = createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let headerClasses = 'dynamic-input ' + this.props.data.element + '-input';
@@ -57,7 +58,7 @@ let Header = React.createClass({
 })
 
 
-let Paragraph = React.createClass({
+let Paragraph =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let classNames = 'static';
@@ -83,7 +84,7 @@ let Paragraph = React.createClass({
   }
 })
 
-let Label = React.createClass({
+let Label =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let classNames = 'static';
@@ -109,7 +110,7 @@ let Label = React.createClass({
   }
 })
 
-let LineBreak = React.createClass({
+let LineBreak =createReactClass({
   mixins: [SortableItemMixin],
   render() {
 
@@ -132,7 +133,7 @@ let LineBreak = React.createClass({
   }
 })
 
-let TextInput = React.createClass({
+let TextInput =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let props = {};
@@ -177,7 +178,7 @@ let TextInput = React.createClass({
   }
 })
 
-let NumberInput = React.createClass({
+let NumberInput =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let props = {};
@@ -222,7 +223,7 @@ let NumberInput = React.createClass({
   }
 })
 
-let TextArea = React.createClass({
+let TextArea =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let props = {};
@@ -265,7 +266,7 @@ let TextArea = React.createClass({
   }
 })
 
-let DatePicker = React.createClass({
+let DatePicker =createReactClass({
   mixins: [SortableItemMixin],
 
   getInitialState() {
@@ -401,7 +402,7 @@ let DatePicker = React.createClass({
   }
 })
 
-let Dropdown = React.createClass({
+let Dropdown =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let props = {};
@@ -450,7 +451,7 @@ let Dropdown = React.createClass({
 })
 
 
-let Signature = React.createClass({
+let Signature =createReactClass({
   mixins: [SortableItemMixin],
   componentDidMount() {
     if (this.props.defaultValue !== undefined && this.props.defaultValue.length > 0 && !this.props.read_only) {
@@ -510,7 +511,7 @@ let Signature = React.createClass({
   }
 })
 
-let Tags = React.createClass({
+let Tags =createReactClass({
   mixins: [SortableItemMixin],
   getInitialState() {
     return {value: this.props.defaultValue !== undefined ? this.props.defaultValue.split(",") : []};
@@ -562,7 +563,7 @@ let Tags = React.createClass({
   }
 })
 
-let Checkboxes = React.createClass({
+let Checkboxes =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let self = this;
@@ -612,7 +613,7 @@ let Checkboxes = React.createClass({
   }
 })
 
-let RadioButtons = React.createClass({
+let RadioButtons =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let self = this;
@@ -662,7 +663,7 @@ let RadioButtons = React.createClass({
   }
 })
 
-let Image = React.createClass({
+let Image =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     var style = (this.props.data.center) ? { textAlign: 'center' } : '';
@@ -686,7 +687,7 @@ let Image = React.createClass({
   }
 })
 
-let Rating = React.createClass({
+let Rating =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let props = {};
@@ -726,7 +727,7 @@ let Rating = React.createClass({
   }
 })
 
-let HyperLink = React.createClass({
+let HyperLink =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let baseClasses = 'rfb-item';
@@ -750,7 +751,7 @@ let HyperLink = React.createClass({
   }
 })
 
-let Download = React.createClass({
+let Download =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let baseClasses = 'rfb-item';
@@ -774,7 +775,7 @@ let Download = React.createClass({
   }
 })
 
-let Camera = React.createClass({
+let Camera =createReactClass({
   mixins: [SortableItemMixin],
 
   getInitialState() {
@@ -854,7 +855,7 @@ let Camera = React.createClass({
   }
 })
 
-let Range = React.createClass({
+let Range =createReactClass({
   mixins: [SortableItemMixin],
   render() {
     let props = {};
@@ -919,7 +920,7 @@ let Range = React.createClass({
               <span className="pull-left">{this.props.data.min_label}</span>
               <span className="pull-right">{this.props.data.max_label}</span>
             </div>
-            <SliderNativeBootstrap
+            <ReactBootstrapSlider
               name={props.name}
               value={props.defaultValue}
               step={this.props.data.step}

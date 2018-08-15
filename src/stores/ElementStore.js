@@ -17,7 +17,7 @@ var ElementStore = Reflux.createStore({
     var self = this;
     _saveUrl = saveUrl;
 
-    if(typeof urlOrData == 'string' || urlOrData instanceof String) {
+    if(typeof urlOrData === 'string' || urlOrData instanceof String) {
       $.ajax({
         url: urlOrData,
         success: function(data) {
