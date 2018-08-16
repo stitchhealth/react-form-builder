@@ -101,7 +101,7 @@ export default class Toolbar extends React.Component {
         key: 'Checkboxes',
         canHaveAnswer: true,
         name: 'Checkboxes',
-        icon: 'fa fa-check-square-o',
+        icon: 'fa fa-check-square',
         label: 'Placeholder Label',
         field_name: 'checkboxes_',
         options: [],

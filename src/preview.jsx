@@ -127,6 +127,8 @@ export default class Preview extends React.Component {
       }
     });
 
+    console.log(this.props.editElement);
+
     return (
       <div className={classes}>
         <div className="edit-form">

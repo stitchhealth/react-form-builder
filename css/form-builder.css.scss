@@ -142,7 +142,7 @@
       user-select: none;
       .rfb-item {
         padding: 10px 20px;
-        &.SortableItem {
+        &.ui-sortable-item {
           position: relative;
           .form-group {
             pointer-events: none;
@@ -189,6 +189,10 @@
           .toolbar-header-buttons {
             position: absolute;
             right: 20px;
+
+            .btn:active, .btn.active {
+              box-shadow: none !important;
+            }
           }
         }
         &:hover {
@@ -221,7 +225,7 @@
   }
 
   .react-form-builder-toolbar {
-    width: 250px;
+    width: 30%;
     background: #fff;
     margin-top: -30px;
 

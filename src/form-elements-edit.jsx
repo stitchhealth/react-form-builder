@@ -42,12 +42,10 @@ export default class FormElementsEdit extends React.Component {
       if (targProperty === 'checked') {
         this.updateElement();
       }
-      ;
     });
   }
 
   onEditorStateChange(index, property, editorContent) {
-
     let html = draftToHtml(convertToRaw(editorContent.getCurrentContent())).replace(/<p>/g, '<div>').replace(/<\/p>/g, '</div>');
     let this_element = this.state.element;
     this_element[property] = html;
@@ -289,4 +287,5 @@ export default class FormElementsEdit extends React.Component {
     );
   }
 }
+
 FormElementsEdit.defaultProps = {className: 'edit-element-fields'};

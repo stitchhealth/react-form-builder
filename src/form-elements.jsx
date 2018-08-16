@@ -2,13 +2,12 @@ import React from 'react';
 import HeaderBar from './header-bar';
 import Select from 'react-select';
 import SignaturePad from 'react-signature-pad';
-import { SortableItemMixin } from 'react-anything-sortable';
+import { sortable } from 'react-anything-sortable';
 import ReactBootstrapSlider from 'react-bootstrap-slider';
 import ReactDatePicker from 'react-datepicker';
 import StarRating from './star-rating';
 import xss from 'xss';
 import moment from 'moment';
-import createReactClass from 'create-react-class';
 import cx from 'classnames';
 
 const myxss = new xss.FilterXSS({
@@ -30,25 +29,31 @@ const myxss = new xss.FilterXSS({
   },
 });
 
-const RfbItem = createReactClass({
+class RfbItem extends React.Component {
   render() {
     const invalidClases = ['', 'true', 'false', 'undefined'];
-    const {children, sortHandle, pageBreakBefore, className, ...props} = this.props;
+    const {children = '', pageBreakBefore = false, className = '', ...props} = this.props;
     const classes = className.split(' ').map(x => x.trim()).filter(x => !invalidClases.includes(x));
     pageBreakBefore && classes.push('alwaysbreak');
     classes.push('rfb-item');
 
     return <div {...props} className={classes.join(' ')}>{children}</div>;
-  },
-});
+  }
+}
 
-const Header = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Header extends React.Component {
   render() {
     const classNames = cx('static', {bold: this.props.data.bold, italic: this.props.data.italic});
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -58,18 +63,24 @@ const Header = createReactClass({
         </div>
         }
         <h3 className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Paragraph = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Paragraph extends React.Component {
   render() {
     const classNames = cx('static', {bold: this.props.data.bold, italic: this.props.data.italic});
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -79,18 +90,24 @@ const Paragraph = createReactClass({
         </div>
         }
         <p className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Label = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Label extends React.Component {
   render() {
     const classNames = cx('static', {bold: this.props.data.bold, italic: this.props.data.italic});
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -100,16 +117,22 @@ const Label = createReactClass({
         </div>
         }
         <label className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const LineBreak = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class LineBreak extends React.Component {
   render() {
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -119,13 +142,13 @@ const LineBreak = createReactClass({
         </div>
         }
         <hr />
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const TextInput = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class TextInput extends React.Component {
   render() {
     let props = {};
     props.type = 'text';
@@ -141,8 +164,14 @@ const TextInput = createReactClass({
       props.disabled = 'disabled';
     }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -161,13 +190,13 @@ const TextInput = createReactClass({
           </label>
           <input {...props} />
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const NumberInput = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class NumberInput extends React.Component {
   render() {
     let props = {};
     props.type = 'number';
@@ -183,8 +212,14 @@ const NumberInput = createReactClass({
       props.disabled = 'disabled';
     }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -203,13 +238,13 @@ const NumberInput = createReactClass({
           </label>
           <input {...props} />
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const TextArea = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class TextArea extends React.Component {
   render() {
     let props = {};
     props.className = 'form-control';
@@ -224,8 +259,14 @@ const TextArea = createReactClass({
       props.ref = 'child_ref_' + this.props.data.field_name;
     }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -243,13 +284,17 @@ const TextArea = createReactClass({
           </label>
           <textarea {...props} />
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const DatePicker = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class DatePicker extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = this.getInitialState();
+  }
 
   getInitialState() {
     var value, internalValue;
@@ -271,7 +316,7 @@ const DatePicker = createReactClass({
       placeholder: 'mm/dd/yyyy',
       defaultToday: this.props.data.defaultToday,
     };
-  },
+  }
 
   handleChange(dt) {
     if (dt && dt.target) {
@@ -292,7 +337,7 @@ const DatePicker = createReactClass({
         placeholder: placeholder,
       });
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
 
@@ -305,7 +350,7 @@ const DatePicker = createReactClass({
     }
 
     this.state.defaultToday = this.props.data.defaultToday;
-  },
+  }
 
   render() {
     let props = {};
@@ -324,8 +369,14 @@ const DatePicker = createReactClass({
       props.disabled = 'disabled';
     }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -376,13 +427,13 @@ const DatePicker = createReactClass({
             }
           </div>
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Dropdown = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Dropdown extends React.Component {
   render() {
     let props = {};
     props.className = 'form-control';
@@ -397,8 +448,14 @@ const Dropdown = createReactClass({
       props.disabled = 'disabled';
     }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -421,19 +478,20 @@ const Dropdown = createReactClass({
             })}
           </select>
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Signature = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Signature extends React.Component {
   componentDidMount() {
     if (this.props.defaultValue !== undefined && this.props.defaultValue.length > 0 && !this.props.read_only) {
       let canvas = this.refs['canvas_' + this.props.data.field_name];
       canvas.fromDataURL('data:image/png;base64,' + this.props.defaultValue);
     }
-  },
+  }
+
   render() {
     let props = {};
     props.type = 'hidden';
@@ -455,8 +513,14 @@ const Signature = createReactClass({
       sourceDataURL = `data:image/png;base64,${this.props.defaultValue}`;
     }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -478,19 +542,22 @@ const Signature = createReactClass({
           }
           <input {...props} />
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Tags = createReactClass({
-  mixins: [SortableItemMixin],
-  getInitialState() {
-    return {value: this.props.defaultValue !== undefined ? this.props.defaultValue.split(',') : []};
-  },
+@sortable
+class Tags extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: this.props.defaultValue !== undefined ? this.props.defaultValue.split(',') : []};
+  }
+
   handleChange(e) {
     this.setState({value: e});
-  },
+  }
+
   render() {
     let options = this.props.data.options.map(option => {
       option.label = option.text;
@@ -511,8 +578,14 @@ const Tags = createReactClass({
       props.ref = 'child_ref_' + this.props.data.field_name;
     }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -530,19 +603,25 @@ const Tags = createReactClass({
           </label>
           <Select {...props} />
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Checkboxes = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Checkboxes extends React.Component {
   render() {
     let self = this;
     const classNames = cx('checkbox-label', {'option-inline': this.props.data.inline});
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -576,19 +655,25 @@ const Checkboxes = createReactClass({
             );
           })}
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const RadioButtons = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class RadioButtons extends React.Component {
   render() {
     let self = this;
     const classNames = cx('radio-label', {'option-inline': this.props.data.inline});
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -622,18 +707,27 @@ const RadioButtons = createReactClass({
             );
           })}
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Image = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Image extends React.Component {
   render() {
-    var style = (this.props.data.center) ? {textAlign: 'center'} : '';
+    if (this.props.data.center) {
+      this.props.style.textAlign = 'center';
+    }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore} style={style}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
+
         {!this.props.mutable &&
         <HeaderBar parent={this.props.parent} editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} onEdit={this.props.onEdit} required={this.props.data.required} />
         }
@@ -643,13 +737,13 @@ const Image = createReactClass({
         {!this.props.data.src &&
         <div className="no-image">No Image</div>
         }
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Rating = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Rating extends React.Component {
   render() {
     let props = {};
     props.name = this.props.data.field_name;
@@ -661,8 +755,14 @@ const Rating = createReactClass({
       props.ref = 'child_ref_' + this.props.data.field_name;
     }
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -680,16 +780,22 @@ const Rating = createReactClass({
           </label>
           <StarRating {...props} />
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const HyperLink = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class HyperLink extends React.Component {
   render() {
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -701,16 +807,22 @@ const HyperLink = createReactClass({
         <div className="form-group">
           <a target="_blank" href={this.props.data.href}>{this.props.data.content}</a>
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Download = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Download extends React.Component {
   render() {
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -722,17 +834,17 @@ const Download = createReactClass({
         <div className="form-group">
           <a href={this.props.download_path + '?id=' + this.props.data.file_path}>{this.props.data.content}</a>
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Camera = createReactClass({
-  mixins: [SortableItemMixin],
-
-  getInitialState() {
-    return {img: null};
-  },
+@sortable
+class Camera extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {img: null};
+  }
 
   displayImage(e) {
     var self = this;
@@ -750,17 +862,23 @@ const Camera = createReactClass({
         });
       };
     }
-  },
+  }
 
   clearImage() {
     this.setState({
       img: null,
     });
-  },
+  }
 
   render() {
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -799,13 +917,13 @@ const Camera = createReactClass({
 
           </div>
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
-const Range = createReactClass({
-  mixins: [SortableItemMixin],
+@sortable
+class Range extends React.Component {
   render() {
     let props = {};
     props.type = 'range';
@@ -844,8 +962,14 @@ const Range = createReactClass({
       return <label {...option_props}>{d}</label>;
     });
 
-    return this.renderWithSortable(
-      <RfbItem pageBreakBefore={this.props.data.pageBreakBefore}>
+    return (
+      <RfbItem
+        style={this.props.style}
+        className={this.props.className}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+        pageBreakBefore={this.props.data.pageBreakBefore}
+      >
         {!this.props.mutable &&
         <div>
           {this.props.data.pageBreakBefore &&
@@ -880,10 +1004,10 @@ const Range = createReactClass({
             {_datalist}
           </datalist>
         </div>
-      </RfbItem>,
+      </RfbItem>
     );
-  },
-});
+  }
+}
 
 module.exports = {
   Header,
