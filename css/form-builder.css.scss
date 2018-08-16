@@ -130,7 +130,7 @@
         }
       }
     }
-    .Sortable {
+    .ui-sortable {
       transition: opacity .25s ease-in;
       position: relative;
       cursor: move;
@@ -296,7 +296,7 @@
         }
       }
 
-      .Sortable .rfb-item .toolbar-header .toolbar-header-buttons {
+      .ui-sortable .rfb-item .toolbar-header .toolbar-header-buttons {
         right: -15px;
         .btn {
           margin-right: 5px;

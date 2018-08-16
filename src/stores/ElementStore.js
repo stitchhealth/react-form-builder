@@ -9,7 +9,7 @@ var ElementStore = Reflux.createStore({
     this.listenTo(ElementActions.createElement, this._create);
     this.listenTo(ElementActions.deleteElement, this._delete);
     this.listenTo(ElementActions.save, this.save);
-    this.listenTo(ElementActions.saveData, this._updateOrder)
+    this.listenTo(ElementActions.saveData, this._updateOrder);
   },
 
   load: function(urlOrData, saveUrl) {
@@ -17,14 +17,14 @@ var ElementStore = Reflux.createStore({
     var self = this;
     _saveUrl = saveUrl;
 
-    if(typeof urlOrData === 'string' || urlOrData instanceof String) {
+    if (typeof urlOrData === 'string' || urlOrData instanceof String) {
       $.ajax({
         url: urlOrData,
         success: function(data) {
           _data = data;
           self.trigger(_data);
-        }
-      })
+        },
+      });
     } else {
       _data = urlOrData;
       self.trigger(_data);
@@ -51,20 +51,20 @@ var ElementStore = Reflux.createStore({
   },
 
   save: function() {
-    if(_saveUrl) {
+    if (_saveUrl) {
       $.ajax({
         type: 'POST',
         url: _saveUrl,
         data: {
-          task_data: JSON.stringify(_data)
+          task_data: JSON.stringify(_data),
         },
         dataType: 'json',
         success: function(data) {
           console.log('Saved... ', arguments);
-        }
-      })
+        },
+      });
     }
-  }
+  },
 
 });
 

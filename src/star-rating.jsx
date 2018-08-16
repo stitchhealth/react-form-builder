@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 /**
  * @fileoverview react-star-rating
@@ -26,13 +26,13 @@ export default class StarRating extends React.Component {
     this.state = {
       ratingCache: {
         pos: 0,
-        rating: 0
+        rating: 0,
       },
       editing: props.editing || true,
       stars: 5,
       rating: 0,
       pos: 0,
-      glyph: this.getStars()
+      glyph: this.getStars(),
     };
   }
 
@@ -62,7 +62,7 @@ export default class StarRating extends React.Component {
       this.setState({
         ratingCache: this.state.ratingCache,
         rating: ratingVal,
-        pos: this.getStarRatingPosition(ratingVal)
+        pos: this.getStarRatingPosition(ratingVal),
       });
     }
   }
@@ -92,14 +92,14 @@ export default class StarRating extends React.Component {
 
   getWidthFromValue(val) {
     var min = this.min,
-        max = this.max;
+      max = this.max;
     if (val <= min || min === max) {
       return 0;
     }
     if (val >= max) {
       return 100;
     }
-    return ( val / (max - min) ) * 100;
+    return (val / (max - min)) * 100;
   }
 
   getValueFromPosition(pos) {
@@ -115,7 +115,7 @@ export default class StarRating extends React.Component {
 
   calculate(pos) {
     var val = this.getValueFromPosition(pos),
-        width = this.getWidthFromValue(val);
+      width = this.getWidthFromValue(val);
 
     width += '%';
     return {width, val};
@@ -144,7 +144,7 @@ export default class StarRating extends React.Component {
   handleMouseLeave() {
     this.setState({
       pos: this.state.ratingCache.pos,
-      rating: this.state.ratingCache.rating
+      rating: this.state.ratingCache.rating,
     });
   }
 
@@ -153,14 +153,14 @@ export default class StarRating extends React.Component {
     var ratingEvent = this.getRatingEvent(e);
     this.updateRating(
       ratingEvent.width,
-      ratingEvent.val
+      ratingEvent.val,
     );
   }
 
   updateRating(width, val) {
     this.setState({
       pos: width,
-      rating: val
+      rating: val,
     });
   }
 
@@ -168,7 +168,7 @@ export default class StarRating extends React.Component {
     if (nextProps !== this.props) {
       this.updateRating(
         this.getStarRatingPosition(nextProps.rating),
-        nextProps.rating
+        nextProps.rating,
       );
       return true;
     } else {
@@ -189,11 +189,11 @@ export default class StarRating extends React.Component {
       pos: this.state.pos,
       rating: this.state.rating,
       caption: this.props.caption,
-      name: this.props.name
+      name: this.props.name,
     };
 
     this.setState({
-      ratingCache: ratingCache
+      ratingCache: ratingCache,
     });
 
     this.props.onRatingClick(e, ratingCache);
@@ -212,7 +212,7 @@ export default class StarRating extends React.Component {
       'react-star-rating__root': true,
       'rating-disabled': this.props.disabled,
       ['react-star-rating__size--' + this.props.size]: this.props.size,
-      'rating-editing': this.state.editing
+      'rating-editing': this.state.editing,
     });
 
     // is there a caption?
@@ -225,11 +225,11 @@ export default class StarRating extends React.Component {
     if (this.state.editing) {
       starRating = (
         <div ref="ratingContainer"
-          className="rating-container rating-gly-star"
-          data-content={this.state.glyph}
-          onMouseMove={this.handleMouseMove.bind(this)}
-          onMouseLeave={this.handleMouseLeave.bind(this)}
-          onClick={this.handleClick.bind(this)}>
+             className="rating-container rating-gly-star"
+             data-content={this.state.glyph}
+             onMouseMove={this.handleMouseMove.bind(this)}
+             onMouseLeave={this.handleMouseLeave.bind(this)}
+             onClick={this.handleClick.bind(this)}>
           <div className="rating-stars" data-content={this.state.glyph} style={{width: this.state.pos}}></div>
           <input type="number" name={this.props.name} value={this.state.ratingCache.rating} style={{display: 'none !important'}} min={this.min} max={this.max} readOnly />
         </div>
@@ -261,12 +261,13 @@ StarRating.propTypes = {
   onRatingClick: PropTypes.func,
   disabled: PropTypes.bool,
   editing: PropTypes.bool,
-  size: PropTypes.string
+  size: PropTypes.string,
 };
 
 StarRating.defaultProps = {
   step: 0.5,
   ratingAmount: 5,
-  onRatingClick() {},
-  disabled: false
+  onRatingClick() {
+  },
+  disabled: false,
 };

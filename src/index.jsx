@@ -1,11 +1,10 @@
 /**
-  * <ReactFormBuilder />
-  */
+ * <ReactFormBuilder />
+ */
 
 import React from 'react';
-import Preview from './preview'
-import Toolbar from './toolbar'
-import ElementActions from './actions/ElementActions';
+import Preview from './preview';
+import Toolbar from './toolbar';
 import ReactFormGenerator from './form';
 
 let FormBuilders = {};
@@ -17,13 +16,13 @@ class ReactFormBuilder extends React.Component {
 
     this.state = {
       editMode: false,
-      editElement: null
-    }
-    document.addEventListener("click", this.editModeOff.bind(this));
+      editElement: null,
+    };
+    document.addEventListener('click', this.editModeOff.bind(this));
   }
 
   editModeOn(data, e) {
-    e.stopPropagation()
+    e.stopPropagation();
     if (this.state.editMode) {
       this.setState({editMode: !this.state.editMode, editElement: null});
     } else {
@@ -35,19 +34,19 @@ class ReactFormBuilder extends React.Component {
     if (this.state.editMode) {
       this.setState({
         editMode: false,
-        editElement: null
+        editElement: null,
       });
     }
   }
 
   editModeOff(e) {
-    const $menu = $(".edit-form");
+    const $menu = $('.edit-form');
     let click_is_outside_menu = (!$menu.is(e.target) && $menu.has(e.target).length === 0);
 
     if (this.state.editMode && click_is_outside_menu) {
       this.setState({
         editMode: false,
-        editElement: null
+        editElement: null,
       });
     }
   }
@@ -61,14 +60,14 @@ class ReactFormBuilder extends React.Component {
         <div className="react-form-builder clearfix">
           <div>
             <Preview files={this.props.files}
-              manualEditModeOff={this.manualEditModeOff.bind(this)}
-              parent={this}
-              url={this.props.url}
-              saveUrl={this.props.saveUrl}
-              editModeOn={this.editModeOn}
-              editMode={this.state.editMode}
-              variables={this.props.variables}
-              editElement={this.state.editElement} />
+                     manualEditModeOff={this.manualEditModeOff.bind(this)}
+                     parent={this}
+                     url={this.props.url}
+                     saveUrl={this.props.saveUrl}
+                     editModeOn={this.editModeOn}
+                     editMode={this.state.editMode}
+                     variables={this.props.variables}
+                     editElement={this.state.editElement} />
             <Toolbar {...toolbarProps} />
           </div>
         </div>

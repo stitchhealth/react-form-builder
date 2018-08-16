@@ -1,6 +1,6 @@
-const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-module.exports = {
+module.exports = [{
   entry: {
     app: ['./src/index.jsx'],
   },
@@ -17,7 +17,6 @@ module.exports = {
     //but get it from a global 'React' variable
     'react': 'react',
     'react-dom': 'react-dom',
-    'react-datepicker': 'react-datepicker',
     'classnames': 'classnames',
     'jquery': 'jquery',
     'bootstrap': 'bootstrap',
@@ -34,15 +33,40 @@ module.exports = {
           presets: ['env', 'react', 'stage-2'],
         },
       },
-      {
-        test: /\.(scss|css)$/,
-        exclude: /node_modules/,
-        loader: 'style-loader!css-loader!sass-loader',
-      },
     ],
   },
 
   resolve: {
+    extensions: ['.js', '.json', '.jsx'],
+  },
+}, {
+  entry: {
+    app: ['./css/application.css.scss'],
+  },
+
+  output: {
+    path: __dirname + '/lib',
+    filename: 'app.css',
+  },
+
+  module: {
+    loaders: [
+      {
+        test: /\.(scss|css)$/,
+        exclude: /node_modules/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader'],
+        }),
+      },
+    ],
+  },
+
+  plugins: [
+    new ExtractTextPlugin('app.css'),
+  ],
+
+  resolve: {
     extensions: ['.js', '.json', '.jsx', '.css', '.scss'],
   },
-};
+}];
