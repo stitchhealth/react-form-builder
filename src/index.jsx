@@ -6,11 +6,11 @@ import React from 'react';
 import Preview from './preview';
 import Toolbar from './toolbar';
 import ReactFormGenerator from './form';
+import ElementStore from './stores/ElementStore';
 
 let FormBuilders = {};
 
 class ReactFormBuilder extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -18,16 +18,22 @@ class ReactFormBuilder extends React.Component {
       editMode: false,
       editElement: null,
     };
+
+    this.editModeOn = this.editModeOn.bind(this);
     document.addEventListener('click', this.editModeOff.bind(this));
+
+    if (props.onChange && typeof props.onChange === 'function') {
+      ElementStore.listen(props.onChange);
+    }
   }
 
   editModeOn(data, e) {
     e.stopPropagation();
-    if (this.state.editMode) {
-      this.setState({editMode: !this.state.editMode, editElement: null});
-    } else {
-      this.setState({editMode: !this.state.editMode, editElement: data});
-    }
+
+    this.setState({
+      editMode: !this.state.editMode,
+      editElement: this.state.editMode ? null : data,
+    });
   }
 
   manualEditModeOff() {
@@ -41,27 +47,30 @@ class ReactFormBuilder extends React.Component {
 
   editModeOff(e) {
     const $menu = $('.edit-form');
-    let click_is_outside_menu = (!$menu.is(e.target) && $menu.has(e.target).length === 0);
+    const $edit = $('.fa-pencil-square-o');
 
-    if (this.state.editMode && click_is_outside_menu) {
-      this.setState({
-        editMode: false,
-        editElement: null,
-      });
+    if (
+      !$menu.is(e.target) &&
+      !$edit.is(e.target) &&
+      !$menu.has(e.target).length === 0 &&
+      !$edit.has(e.target).length === 0
+    ) {
+      this.manualEditModeOff();
     }
   }
 
   render() {
     let toolbarProps = {};
-    if (this.props.toolbarItems)
+    if (this.props.toolbarItems) {
       toolbarProps.items = this.props.toolbarItems;
+    }
+
     return (
       <div>
         <div className="react-form-builder clearfix">
           <div>
             <Preview files={this.props.files}
                      manualEditModeOff={this.manualEditModeOff.bind(this)}
-                     parent={this}
                      url={this.props.url}
                      saveUrl={this.props.saveUrl}
                      editModeOn={this.editModeOn}
