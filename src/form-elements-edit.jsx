@@ -81,11 +81,16 @@ export default class FormElementsEdit extends React.Component {
       this_files.unshift({id: '', file_name: ''});
 
     if (this.props.element.hasOwnProperty('content')) {
-      var contentState = ContentState.createFromBlockArray(convertFromHTML(this.props.element.content));
+      const isEmpty = this.props.element.content.trim() === '<div></div>';
+      const content = isEmpty ? '<div>Type...</div>' : this.props.element.content;
+      const contentState = ContentState.createFromBlockArray(convertFromHTML(content));
       var editorState = EditorState.createWithContent(contentState);
     }
+
     if (this.props.element.hasOwnProperty('label')) {
-      var contentState = ContentState.createFromBlockArray(convertFromHTML(this.props.element.label));
+      const isEmpty = this.props.element.label.trim() === '<div></div>';
+      const content = isEmpty ? '<div>Type...</div>' : this.props.element.label;
+      const contentState = ContentState.createFromBlockArray(convertFromHTML(content));
       var editorState = EditorState.createWithContent(contentState);
     }
 
