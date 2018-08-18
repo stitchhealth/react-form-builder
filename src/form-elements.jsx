@@ -696,13 +696,15 @@ class RadioButtons extends React.Component {
 @sortable
 class Image extends React.Component {
   render() {
+    const style = {...this.props.style};
+
     if (this.props.data.center) {
-      this.props.style.textAlign = 'center';
+      style.textAlign = 'center';
     }
 
     return (
       <RfbItem
-        style={this.props.style}
+        style={style}
         className={this.props.className}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
@@ -713,7 +715,7 @@ class Image extends React.Component {
         <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} required={this.props.data.required} />
         }
         {this.props.data.src &&
-        <img src={this.props.data.src} width={this.props.data.width} height={this.props.data.height} />
+        <img src={this.props.data.src} width={this.props.data.width} height={this.props.data.height} style={{maxWidth: '100%'}} />
         }
         {!this.props.data.src &&
         <div className="no-image">No Image</div>
