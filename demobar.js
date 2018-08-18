@@ -1,6 +1,6 @@
 import React from "react";
 import ElementStore from './src/stores/ElementStore';
-import ReactFormGenerator from './src/form';
+import ReactFormGenerator from './src/form-generator';
 
 export default class Demobar extends React.Component {
 
@@ -145,5 +145,4 @@ export default class Demobar extends React.Component {
       </div>
     );
   }
-
 }

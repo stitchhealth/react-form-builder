@@ -1,5 +1,5 @@
 /**
- * <Form />
+ * <FormGenerator />
  */
 
 import React from 'react';
@@ -8,7 +8,7 @@ import { EventEmitter } from 'fbemitter';
 import FormValidator from './form-validator';
 import { Camera, Checkboxes, DatePicker, Download, Dropdown, Header, HyperLink, Image, Label, LineBreak, NumberInput, Paragraph, RadioButtons, Range, Rating, Signature, Tags, TextArea, TextInput } from './form-elements';
 
-export default class ReactForm extends React.Component {
+export default class FormGenerator extends React.Component {
   constructor(props) {
     super(props);
     this.emitter = new EventEmitter();
@@ -249,4 +249,4 @@ export default class ReactForm extends React.Component {
   }
 }
 
-ReactForm.defaultProps = {validateForCorrectness: false};
+FormGenerator.defaultProps = {validateForCorrectness: false};

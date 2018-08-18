@@ -41,11 +41,12 @@ export default class StarRating extends React.Component {
    * @return {string} stars
    */
   getStars() {
-    var stars = '';
-    var numRating = this.props.ratingAmount;
-    for(var i = 0; i < numRating; i++) {
+    let stars = '';
+    const numRating = this.props.ratingAmount;
+    for(let i = 0; i < numRating; i++) {
       stars += '\u2605';
     }
+
     return stars;
   }
 
@@ -55,7 +56,7 @@ export default class StarRating extends React.Component {
     if (this.props.rating) {
 
       this.state.editing = this.props.editing || false;
-      var ratingVal = this.props.rating;
+      const ratingVal = this.props.rating;
       this.state.ratingCache.pos = this.getStarRatingPosition(ratingVal);
       this.state.ratingCache.rating = ratingVal;
 
@@ -86,13 +87,14 @@ export default class StarRating extends React.Component {
   }
 
   getDecimalPlaces(num) {
-    var match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
+    const match = ('' + num).match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/);
     return !match ? 0 : Math.max(0, (match[1] ? match[1].length : 0) - (match[2] ? +match[2] : 0));
   }
 
   getWidthFromValue(val) {
-    var min = this.min,
-      max = this.max;
+    const min = this.min;
+    const max = this.max;
+
     if (val <= min || min === max) {
       return 0;
     }
@@ -103,31 +105,29 @@ export default class StarRating extends React.Component {
   }
 
   getValueFromPosition(pos) {
-    var precision = this.getDecimalPlaces(this.props.step);
-    var maxWidth = this.ratingContainer.offsetWidth;
-    var diff = this.max - this.min;
-    var factor = (diff * pos) / (maxWidth * this.props.step);
+    const precision = this.getDecimalPlaces(this.props.step);
+    const maxWidth = this.ratingContainer.offsetWidth;
+    const diff = this.max - this.min;
+    let factor = (diff * pos) / (maxWidth * this.props.step);
     factor = Math.ceil(factor);
-    var val = this.applyPrecision(parseFloat(this.min + factor * this.props.step), precision);
-    val = Math.max(Math.min(val, this.max), this.min);
-    return val;
+    const val = this.applyPrecision(parseFloat(this.min + factor * this.props.step), precision);
+
+    return Math.max(Math.min(val, this.max), this.min);
   }
 
   calculate(pos) {
-    var val = this.getValueFromPosition(pos),
-      width = this.getWidthFromValue(val);
+    const val = this.getValueFromPosition(pos);
+    const width = this.getWidthFromValue(val) + '%';
 
-    width += '%';
     return {width, val};
   }
 
   getStarRatingPosition(val) {
-    var width = this.getWidthFromValue(val) + '%';
-    return width;
+    return this.getWidthFromValue(val) + '%';
   }
 
   getRatingEvent(e) {
-    var pos = this.getPosition(e);
+    const pos = this.getPosition(e);
     return this.calculate(pos);
   }
 
@@ -150,7 +150,7 @@ export default class StarRating extends React.Component {
 
   handleMouseMove(e) {
     // get hover position
-    var ratingEvent = this.getRatingEvent(e);
+    const ratingEvent = this.getRatingEvent(e);
     this.updateRating(
       ratingEvent.width,
       ratingEvent.val,
@@ -177,7 +177,6 @@ export default class StarRating extends React.Component {
   }
 
   handleClick(e) {
-
     // is it disabled?
     if (this.props.disabled) {
       e.stopPropagation();
@@ -185,7 +184,7 @@ export default class StarRating extends React.Component {
       return false;
     }
 
-    var ratingCache = {
+    const ratingCache = {
       pos: this.state.pos,
       rating: this.state.rating,
       caption: this.props.caption,
@@ -206,9 +205,8 @@ export default class StarRating extends React.Component {
   }
 
   render() {
-
-    var caption = null;
-    var classes = cx({
+    let caption = null;
+    const classes = cx({
       'react-star-rating__root': true,
       'rating-disabled': this.props.disabled,
       ['react-star-rating__size--' + this.props.size]: this.props.size,
@@ -221,7 +219,7 @@ export default class StarRating extends React.Component {
     }
 
     // are we editing this rating?
-    var starRating;
+    let starRating;
     if (this.state.editing) {
       starRating = (
         <div ref="ratingContainer"

@@ -4,7 +4,7 @@ var jsdom = require('mocha-jsdom');
 var assert = require('assert');
 var React = require('react/addons');
 var ReactDOM = require('react-dom');
-var GeneratedForm = require('../src/form.jsx').default;
+var GeneratedForm = require('../src/form-generator.jsx').default;
 var TestUtils = React.addons.TestUtils;
 
 var state = {

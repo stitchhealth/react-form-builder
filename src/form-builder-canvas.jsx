@@ -1,5 +1,5 @@
 /**
- * <Preview />
+ * <FormBuilderCanvas />
  */
 
 import React from 'react';
@@ -9,7 +9,7 @@ import ElementActions from './actions/ElementActions';
 import FormElementsEdit from './form-elements-edit';
 import { Camera, Checkboxes, DatePicker, Download, Dropdown, Header, HyperLink, Image, Label, LineBreak, NumberInput, Paragraph, RadioButtons, Range, Rating, Signature, Tags, TextArea, TextInput } from './form-elements';
 
-export default class Preview extends React.Component {
+export default class FormBuilderCanvas extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -127,7 +127,6 @@ export default class Preview extends React.Component {
       }
     });
 
-
     return (
       <div className={classes}>
         <div className="edit-form">
@@ -143,7 +142,7 @@ export default class Preview extends React.Component {
   }
 }
 
-Preview.defaultProps = {
+FormBuilderCanvas.defaultProps = {
   showCorrectColumn: false,
   files: [],
   editMode: false,

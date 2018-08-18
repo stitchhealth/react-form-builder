@@ -3,29 +3,9 @@
  */
 
 import React from 'react';
-import xss from 'xss';
-
-let myxss = new xss.FilterXSS({
-  whiteList: {
-    u: [],
-    br: [],
-    b: [],
-    i: [],
-    ol: ['style'],
-    ul: ['style'],
-    li: [],
-    p: ['style'],
-    sub: [],
-    sup: [],
-    div: ['style'],
-    em: [],
-    strong: [],
-    span: ['style'],
-  },
-});
+import myxss from './filter-xss';
 
 export default class FormValidator extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {

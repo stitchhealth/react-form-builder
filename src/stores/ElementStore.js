@@ -1,10 +1,10 @@
-var Reflux = require('reflux');
-var ElementActions = require('../actions/ElementActions');
+import Reflux from 'reflux';
+import ElementActions from '../actions/ElementActions';
 
-var _data;
-var _saveUrl;
+let _data;
+let _saveUrl;
 
-var ElementStore = Reflux.createStore({
+export default Reflux.createStore({
   init: function() {
     this.listenTo(ElementActions.createElement, this._create);
     this.listenTo(ElementActions.deleteElement, this._delete);
@@ -13,8 +13,7 @@ var ElementStore = Reflux.createStore({
   },
 
   load: function(urlOrData, saveUrl) {
-
-    var self = this;
+    const self = this;
     _saveUrl = saveUrl;
 
     if (typeof urlOrData === 'string' || urlOrData instanceof String) {
@@ -38,7 +37,7 @@ var ElementStore = Reflux.createStore({
   },
 
   _delete: function(element) {
-    var index = _data.indexOf(element);
+    const index = _data.indexOf(element);
     _data.splice(index, 1);
     this.trigger(_data);
     this.save();
@@ -65,7 +64,4 @@ var ElementStore = Reflux.createStore({
       });
     }
   },
-
 });
-
-module.exports = ElementStore;

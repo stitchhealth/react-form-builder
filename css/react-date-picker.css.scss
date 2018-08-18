@@ -328,3 +328,14 @@
 .react-datepicker__tether-element {
   z-index: 2147483647;
 }
+
+.react-datepicker-popper {
+  z-index: 100;
+}
+
+.react-datepicker__navigation--previous,
+.react-datepicker__navigation--next {
+  background-color: #f0f0f0;
+  text-indent: -9999px;
+  padding: 0;
+}

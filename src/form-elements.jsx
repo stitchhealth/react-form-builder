@@ -6,28 +6,9 @@ import { sortable } from 'react-anything-sortable';
 import ReactBootstrapSlider from 'react-bootstrap-slider';
 import ReactDatePicker from 'react-datepicker';
 import StarRating from './star-rating';
-import xss from 'xss';
+import myxss from './filter-xss';
 import moment from 'moment';
 import cx from 'classnames';
-
-const myxss = new xss.FilterXSS({
-  whiteList: {
-    u: [],
-    br: [],
-    b: [],
-    i: [],
-    ol: ['style'],
-    ul: ['style'],
-    li: [],
-    p: ['style'],
-    sub: [],
-    sup: [],
-    div: ['style'],
-    em: [],
-    strong: [],
-    span: ['style'],
-  },
-});
 
 class RfbItem extends React.Component {
   render() {
@@ -805,7 +786,7 @@ class HyperLink extends React.Component {
         </div>
         }
         <div className="form-group">
-          <a target="_blank" href={this.props.data.href}>{this.props.data.content}</a>
+          <a target="_blank" href={this.props.data.href} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
         </div>
       </RfbItem>
     );
@@ -832,7 +813,7 @@ class Download extends React.Component {
         </div>
         }
         <div className="form-group">
-          <a href={this.props.download_path + '?id=' + this.props.data.file_path}>{this.props.data.content}</a>
+          <a href={this.props.download_path + '?id=' + this.props.data.file_path} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
         </div>
       </RfbItem>
     );
@@ -889,7 +870,7 @@ class Camera extends React.Component {
         }
         <div className="form-group">
           <label>
-            {this.props.data.label}
+            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -980,7 +961,7 @@ class Range extends React.Component {
         }
         <div className="form-group">
           <label>
-            {this.props.data.label}
+            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -1009,7 +990,7 @@ class Range extends React.Component {
   }
 }
 
-module.exports = {
+export {
   Header,
   Paragraph,
   Label,

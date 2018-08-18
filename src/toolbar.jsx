@@ -8,7 +8,6 @@ import ToolbarItem from './toolbar-item';
 import ElementActions from './actions/ElementActions';
 
 export default class Toolbar extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -214,7 +213,6 @@ export default class Toolbar extends React.Component {
   }
 
   _onClick(item) {
-
     var elementOptions = {
       id: uuid(),
       element: item.key,
