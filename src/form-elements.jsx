@@ -275,6 +275,7 @@ class DatePicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getInitialState();
+    this.handleChange = this.handleChange.bind(this);
   }
 
   getInitialState() {
@@ -301,7 +302,6 @@ class DatePicker extends React.Component {
 
   handleChange(dt) {
     if (dt && dt.target) {
-
       var placeholder = (dt && dt.target && dt.target.value === '') ? 'mm/dd/yyyy' : '';
       var formattedDate = (dt.target.value) ? moment(dt.target.value).format('YYYY-MM-DD') : '';
 
