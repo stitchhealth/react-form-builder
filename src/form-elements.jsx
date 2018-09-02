@@ -321,7 +321,6 @@ class DatePicker extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     if (this.props.data.defaultToday && !this.state.defaultToday) {
       this.state.value = moment().format('MM/DD/YYYY');
       this.state.internalValue = moment(this.state.value);
