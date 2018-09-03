@@ -13,7 +13,7 @@ import cx from 'classnames';
 class RfbItem extends React.Component {
   render() {
     const invalidClases = ['', 'true', 'false', 'undefined'];
-    const {children = '', pageBreakBefore = false, className = '', ...props} = this.props;
+    const { children = '', pageBreakBefore = false, className = '', ...props } = this.props;
     const classes = className.split(' ').map(x => x.trim()).filter(x => !invalidClases.includes(x));
     pageBreakBefore && classes.push('alwaysbreak');
     classes.push('rfb-item');
@@ -25,7 +25,7 @@ class RfbItem extends React.Component {
 @sortable
 class Header extends React.Component {
   render() {
-    const classNames = cx('static', {bold: this.props.data.bold, italic: this.props.data.italic});
+    const classNames = cx('static', { bold: this.props.data.bold, italic: this.props.data.italic });
 
     return (
       <RfbItem
@@ -43,7 +43,7 @@ class Header extends React.Component {
           <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
         </div>
         }
-        <h3 className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
+        <h3 className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
     );
   }
@@ -52,7 +52,7 @@ class Header extends React.Component {
 @sortable
 class Paragraph extends React.Component {
   render() {
-    const classNames = cx('static', {bold: this.props.data.bold, italic: this.props.data.italic});
+    const classNames = cx('static', { bold: this.props.data.bold, italic: this.props.data.italic });
 
     return (
       <RfbItem
@@ -70,7 +70,7 @@ class Paragraph extends React.Component {
           <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
         </div>
         }
-        <p className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
+        <p className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
     );
   }
@@ -79,7 +79,7 @@ class Paragraph extends React.Component {
 @sortable
 class Label extends React.Component {
   render() {
-    const classNames = cx('static', {bold: this.props.data.bold, italic: this.props.data.italic});
+    const classNames = cx('static', { bold: this.props.data.bold, italic: this.props.data.italic });
 
     return (
       <RfbItem
@@ -97,7 +97,7 @@ class Label extends React.Component {
           <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
         </div>
         }
-        <label className={classNames} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
+        <label className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
     );
   }
@@ -163,7 +163,7 @@ class TextInput extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
 
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
@@ -211,7 +211,7 @@ class NumberInput extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
 
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
@@ -258,7 +258,7 @@ class TextArea extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -336,6 +336,7 @@ class DatePicker extends React.Component {
     let props = {};
     props.type = 'date';
     props.className = 'form-control';
+    props.disabled = this.props.read_only;
     props.name = this.props.data.field_name;
 
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -343,10 +344,6 @@ class DatePicker extends React.Component {
     if (this.props.mutable) {
       props.defaultValue = this.props.defaultValue;
       props.ref = 'child_ref_' + this.props.data.field_name;
-    }
-
-    if (this.props.read_only) {
-      props.disabled = 'disabled';
     }
 
     return (
@@ -367,18 +364,17 @@ class DatePicker extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
           <div>
             {this.props.data.readOnly &&
-            <input type="text"
+            <input readOnly
+                   type="text"
                    name={props.name}
                    ref={props.ref}
-                   readOnly="true"
-                   dateFormat="MM/DD/YYYY"
                    placeholder={this.state.placeholder}
                    value={this.state.value}
                    className="form-control" />
@@ -397,6 +393,7 @@ class DatePicker extends React.Component {
             <ReactDatePicker
               name={props.name}
               ref={props.ref}
+              disabled={props.disabled}
               onChange={this.handleChange}
               selected={this.state.internalValue}
               todayButton={'Today'}
@@ -446,7 +443,7 @@ class Dropdown extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -465,27 +462,58 @@ class Dropdown extends React.Component {
 
 @sortable
 class Signature extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { value: this.props.mutable ? this.props.defaultValue : '' };
+    this._setDataUrl = this._setDataUrl.bind(this);
+    this._clearDataUrl = this._clearDataUrl.bind(this);
+  }
+
   componentDidMount() {
     if (this.props.defaultValue !== undefined && this.props.defaultValue.length > 0 && !this.props.read_only) {
-      let canvas = this.refs['canvas_' + this.props.data.field_name];
-      canvas.fromDataURL('data:image/png;base64,' + this.props.defaultValue);
+      this.canvasRef.fromDataURL('data:image/png;base64,' + this.props.defaultValue);
+    }
+
+    const clearBtn = document.querySelector('.m-signature-pad--footer button');
+    clearBtn && clearBtn.addEventListener('click', this._clearDataUrl);
+  }
+
+  componentWillUnmount() {
+    const clearBtn = document.querySelector('.m-signature-pad--footer button');
+    clearBtn && clearBtn.removeEventListener('click', this._clearDataUrl);
+  }
+
+  _clearDataUrl() {
+    this.setState({ value: '' });
+  }
+
+  _setDataUrl() {
+    if (this.canvasRef.isEmpty()) {
+      this.setState({ value: '' });
+    } else {
+      const value = this.canvasRef.toDataURL().replace('data:image/png;base64,', '');
+      this.setState({ value });
+    }
+  }
+
+  handleChange(e) {
+    const { handleChange } = this.props;
+    if (typeof handleChange === 'function') {
+      handleChange(e);
     }
   }
 
   render() {
     let props = {};
     props.type = 'hidden';
+    props.value = this.state.value;
     props.name = this.props.data.field_name;
 
-    if (this.props.mutable) {
-      props.defaultValue = this.props.defaultValue;
-      props.ref = 'child_ref_' + this.props.data.field_name;
-    }
     let pad_props = {};
     pad_props.clearButton = true;
     if (this.props.mutable) {
       pad_props.defaultValue = this.props.defaultValue;
-      pad_props.ref = 'canvas_' + this.props.data.field_name;
     }
 
     let sourceDataURL;
@@ -511,14 +539,14 @@ class Signature extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
           </label>
           {this.props.read_only === true && this.props.defaultValue && this.props.defaultValue.length > 0
             ? (<div><img src={sourceDataURL} /></div>)
-            : (<SignaturePad {...pad_props} />)
+            : (<SignaturePad {...pad_props} ref={(ref) => this.canvasRef = ref} onEnd={this._setDataUrl} />)
           }
           <input {...props} />
         </div>
@@ -531,11 +559,11 @@ class Signature extends React.Component {
 class Tags extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: this.props.defaultValue !== undefined ? this.props.defaultValue.split(',') : []};
+    this.state = { value: this.props.defaultValue !== undefined ? this.props.defaultValue.split(',') : [] };
   }
 
   handleChange(e) {
-    this.setState({value: e});
+    this.setState({ value: e });
   }
 
   render() {
@@ -548,11 +576,13 @@ class Tags extends React.Component {
     props.multi = true;
     props.name = this.props.data.field_name;
     props.onChange = this.handleChange;
-
     props.options = options;
+    props.isDisabled = this.props.read_only;
+
     if (!this.props.mutable) {
       props.value = options[0].text;
     } // to show a sample of what tags looks like
+
     if (this.props.mutable) {
       props.value = this.state.value;
       props.ref = 'child_ref_' + this.props.data.field_name;
@@ -576,7 +606,7 @@ class Tags extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -592,7 +622,7 @@ class Tags extends React.Component {
 class Checkboxes extends React.Component {
   render() {
     let self = this;
-    const classNames = cx('checkbox-label', {'option-inline': this.props.data.inline});
+    const classNames = cx('checkbox-label', { 'option-inline': this.props.data.inline });
 
     return (
       <RfbItem
@@ -612,7 +642,7 @@ class Checkboxes extends React.Component {
         }
         <div className="form-group">
           <label className="form-label">
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -624,6 +654,7 @@ class Checkboxes extends React.Component {
 
             props.type = 'checkbox';
             props.value = option.value;
+            props.disabled = self.props.read_only;
             if (self.props.mutable) {
               props.defaultChecked = self.props.defaultValue.indexOf(option.value) > -1 ? true : false;
               props.ref = 'child_ref_' + option.key;
@@ -644,7 +675,7 @@ class Checkboxes extends React.Component {
 class RadioButtons extends React.Component {
   render() {
     let self = this;
-    const classNames = cx('radio-label', {'option-inline': this.props.data.inline});
+    const classNames = cx('radio-label', { 'option-inline': this.props.data.inline });
 
     return (
       <RfbItem
@@ -664,7 +695,7 @@ class RadioButtons extends React.Component {
         }
         <div className="form-group">
           <label className="form-label">
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -676,6 +707,7 @@ class RadioButtons extends React.Component {
 
             props.type = 'radio';
             props.value = option.value;
+            props.disabled = self.props.read_only;
             if (self.props.mutable) {
               props.defaultChecked = (self.props.defaultValue !== undefined && self.props.defaultValue.indexOf(option.value) > -1) ? true : false;
               props.ref = 'child_ref_' + option.key;
@@ -695,7 +727,7 @@ class RadioButtons extends React.Component {
 @sortable
 class Image extends React.Component {
   render() {
-    const style = {...this.props.style};
+    const style = { ...this.props.style };
 
     if (this.props.data.center) {
       style.textAlign = 'center';
@@ -714,7 +746,7 @@ class Image extends React.Component {
         <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} required={this.props.data.required} />
         }
         {this.props.data.src &&
-        <img src={this.props.data.src} width={this.props.data.width} height={this.props.data.height} style={{maxWidth: '100%'}} />
+        <img src={this.props.data.src} width={this.props.data.width} height={this.props.data.height} style={{ maxWidth: '100%' }} />
         }
         {!this.props.data.src &&
         <div className="no-image">No Image</div>
@@ -755,7 +787,7 @@ class Rating extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -787,7 +819,7 @@ class HyperLink extends React.Component {
         </div>
         }
         <div className="form-group">
-          <a target="_blank" href={this.props.data.href} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
+          <a target="_blank" href={this.props.data.href} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
         </div>
       </RfbItem>
     );
@@ -814,7 +846,7 @@ class Download extends React.Component {
         </div>
         }
         <div className="form-group">
-          <a href={this.props.download_path + '?id=' + this.props.data.file_path} dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.content)}} />
+          <a href={this.props.download_path + '?id=' + this.props.data.file_path} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
         </div>
       </RfbItem>
     );
@@ -825,7 +857,9 @@ class Download extends React.Component {
 class Camera extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {img: null};
+    this.state = { img: null };
+
+    this.displayImage = this.displayImage.bind(this);
   }
 
   displayImage(e) {
@@ -871,7 +905,7 @@ class Camera extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -921,8 +955,12 @@ class Range extends React.Component {
       props.ref = 'child_ref_' + this.props.data.field_name;
     }
 
+    if (this.props.read_only) {
+      props.disabled = 'disabled';
+    }
+
     let datalist = [];
-    for(var i = parseInt(this.props.data.min_value, 10); i <= parseInt(this.props.data.max_value, 10); i += parseInt(this.props.data.step, 10)) {
+    for (var i = parseInt(this.props.data.min_value, 10); i <= parseInt(this.props.data.max_value, 10); i += parseInt(this.props.data.step, 10)) {
       datalist.push(i);
     }
 
@@ -938,9 +976,9 @@ class Range extends React.Component {
       if (idx === 0 || idx === datalist.length - 1)
         w = oneBig / 2;
       option_props.key = props.list + '_label_' + idx;
-      option_props.style = {width: w + '%'};
+      option_props.style = { width: w + '%' };
       if (idx === datalist.length - 1)
-        option_props.style = {width: w + '%', textAlign: 'right'};
+        option_props.style = { width: w + '%', textAlign: 'right' };
       return <label {...option_props}>{d}</label>;
     });
 
@@ -962,7 +1000,7 @@ class Range extends React.Component {
         }
         <div className="form-group">
           <label>
-            <span dangerouslySetInnerHTML={{__html: myxss.process(this.props.data.label)}} />
+            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
             {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
             <span className="label-required label label-danger">Required</span>
             }
@@ -977,7 +1015,8 @@ class Range extends React.Component {
               value={props.defaultValue}
               step={this.props.data.step}
               max={this.props.data.max_value}
-              min={this.props.data.min_value} />
+              min={this.props.data.min_value}
+              disabled={props.disabled} />
           </div>
           <div className="visible_marks">
             {visible_marks}

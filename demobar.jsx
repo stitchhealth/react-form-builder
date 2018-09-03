@@ -1,0 +1,117 @@
+import React from 'react';
+import ElementStore from './src/stores/ElementStore';
+import ReactFormGenerator from './src/form-generator';
+
+export default class Demobar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      previewVisible: false,
+      roPreviewVisible: false,
+    };
+
+    ElementStore.listen(this._onChange.bind(this));
+  }
+
+  showPreview() {
+    this.setState({
+      previewVisible: true,
+    });
+  }
+
+  showRoPreview() {
+    this.setState({
+      roPreviewVisible: true,
+    });
+  }
+
+  closePreview() {
+    this.setState({
+      previewVisible: false,
+      roPreviewVisible: false,
+    });
+  }
+
+  _onChange(data) {
+    this.setState({
+      data: data,
+    });
+  }
+
+  getFormData() {
+    console.log(this.formRef.getFormData());
+  }
+
+  render() {
+    var modalClass = 'modal';
+    if (this.state.previewVisible) {
+      modalClass += ' show';
+    }
+
+    var roModalClass = 'modal ro-modal';
+    if (this.state.roPreviewVisible) {
+      roModalClass += ' show';
+    }
+
+    return (
+      <div className="clearfix" style={{ margin: '10px', width: '70%' }}>
+        <h4 className="pull-left">Preview</h4>
+        <button className="btn btn-primary pull-right" style={{ marginRight: '10px' }} onClick={this.showPreview.bind(this)}>Preview Form</button>
+        <button className="btn btn-default pull-right" style={{ marginRight: '10px' }} onClick={this.showRoPreview.bind(this)}>Read Only Form</button>
+
+        {this.state.previewVisible &&
+        <div className={modalClass}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <ReactFormGenerator
+                download_path=""
+                back_action="/"
+                back_name="Back"
+                answer_data={{}}
+                action_name="Save"
+                form_action="/"
+                form_method="POST"
+                variables={this.props.variables}
+                data={this.state.data}
+                ref={(ref) => {
+                  this.formRef = ref;
+                }}
+              />
+
+              <div className="modal-footer">
+                <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.getFormData.bind(this)}>Get Data</button>
+                <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+
+        {this.state.roPreviewVisible &&
+        <div className={roModalClass}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <ReactFormGenerator
+                download_path=""
+                back_action="/"
+                back_name="Back"
+                answer_data={{}}
+                action_name="Save"
+                form_action="/"
+                form_method="POST"
+                read_only={true}
+                variables={this.props.variables}
+                hide_actions={true} data={this.state.data} />
+
+              <div className="modal-footer">
+                <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    );
+  }
+}
