@@ -9,12 +9,12 @@
 }
 
 .ui-sortable:before,
-.ui-sortable:after{
+.ui-sortable:after {
   content: " ";
   display: table;
 }
 
-.ui-sortable:after{
+.ui-sortable:after {
   clear: both;
 }
 

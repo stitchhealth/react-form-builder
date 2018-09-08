@@ -1,5 +1,5 @@
-.react-form-builder {
-  .react-form-builder-preview {
+.rfbb {
+  .rfbp {
     position: relative;
     width: 78%;
     border: 1px solid #ddd;
@@ -215,7 +215,7 @@
     }
   }
 
-  .react-form-builder-toolbar {
+  .rfbt {
     width: 22%;
     background: #fff;
     margin-top: -30px;
@@ -275,10 +275,10 @@
 }
 
 @media (max-width: $screen-sm-min) {
-  .react-form-builder {
+  .rfbb {
     position: relative;
 
-    .react-form-builder-preview {
+    .rfbp {
       width: 100%;
 
       .edit-form {
@@ -306,7 +306,7 @@
       }
     }
 
-    .react-form-builder-toolbar {
+    .rfbt {
 
       h4 {
         padding: 10px;

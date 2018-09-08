@@ -7,6 +7,7 @@ input[type="date"]:before {
 input[type="date"] {
   width: 200px;
 }
+
 .validation-error {
   position: fixed;
   width: 100%;
@@ -21,12 +22,19 @@ input[type="date"] {
     margin-top: 10px;
   }
 }
-.react-form-builder-form {
+
+.rfbg {
   position: relative;
 
-  .rfb-item.alwaysbreak { page-break-before: always; }
-  .rfb-item.nobreak:before { clear:both; }
-  .rfb-item.nobreak { page-break-inside: avoid; }
+  .rfb-item.alwaysbreak {
+    page-break-before: always;
+  }
+  .rfb-item.nobreak:before {
+    clear: both;
+  }
+  .rfb-item.nobreak {
+    page-break-inside: avoid;
+  }
 
   .rfb-item {
     padding: 10px 0;

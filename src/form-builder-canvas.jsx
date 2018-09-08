@@ -181,5 +181,5 @@ FormBuilderCanvas.defaultProps = {
   files: [],
   showCorrectColumn: false,
   onChange: () => undefined,
-  className: 'react-form-builder-preview pull-left',
+  className: 'rfbp pull-left',
 };

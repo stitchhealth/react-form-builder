@@ -196,10 +196,10 @@ export default class FormGenerator extends React.Component {
     });
 
     return (
-      <div>
+      <div className="rfbw">
         <form ref='form'>
           <FormValidator emitter={this.emitter} />
-          <div className='react-form-builder-form'>{items}</div>
+          <div className='rfbg'>{items}</div>
         </form>
       </div>
     );

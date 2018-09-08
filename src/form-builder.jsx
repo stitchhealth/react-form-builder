@@ -25,8 +25,8 @@ export default class FormBuilder extends React.Component {
     }
 
     return (
-      <div>
-        <div className="react-form-builder clearfix">
+      <div className="rfbw">
+        <div className="rfbb clearfix">
           <div>
             <FormBuilderCanvas value={value}
                                onChange={onChange}
