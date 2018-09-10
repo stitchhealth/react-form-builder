@@ -307,36 +307,11 @@
     }
 
     .rfbt {
-
       h4 {
         padding: 10px;
-        background: #7a0019;
-        color: #fff;
       }
 
       width: 100%;
-      position: fixed;
-      z-index: 900;
-      bottom: -320px;
-
-      -webkit-transition: transform 0.5s;
-      transition: transform 0.5s;
-
-      -webkit-transform: translate(0, 0);
-      transform: translate(0, 0);
-
-      right: 0;
-      border-top: 2px solid #ccc;
-
-      ul {
-        height: 300px;
-        overflow-x: scroll;
-      }
-    }
-
-    .active-toolbar {
-      -webkit-transform: translate(0, -300px);
-      transform: translate(0, -300px);
     }
   }
 

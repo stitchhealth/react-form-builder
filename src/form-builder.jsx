@@ -28,10 +28,12 @@ export default class FormBuilder extends React.Component {
       <div className="rfbw">
         <div className="rfbb clearfix">
           <div>
-            <FormBuilderCanvas value={value}
-                               onChange={onChange}
-                               files={this.props.files}
-                               variables={this.props.variables} />
+            <FormBuilderCanvas
+              value={value}
+              onChange={onChange}
+              files={this.props.files}
+              variables={this.props.variables}
+              showCorrectColumn={this.props.showCorrectColumn} />
             <Toolbar {...toolbarProps} />
           </div>
         </div>

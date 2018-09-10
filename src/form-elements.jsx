@@ -370,38 +370,28 @@ class DatePicker extends React.Component {
             }
           </label>
           <div>
-            {this.props.data.readOnly &&
-            <input readOnly
-                   type="text"
-                   name={props.name}
-                   ref={props.ref}
-                   placeholder={this.state.placeholder}
-                   value={this.state.value}
-                   className="form-control" />
-            }
-            {iOS && !this.props.data.readOnly &&
-            <input type="date"
-                   name={props.name}
-                   ref={props.ref}
-                   onChange={this.handleChange}
-                   dateFormat="MM/DD/YYYY"
-                   placeholder={this.state.placeholder}
-                   value={this.state.value}
-                   className="form-control" />
-            }
-            {!iOS && !this.props.data.readOnly &&
-            <ReactDatePicker
-              name={props.name}
-              ref={props.ref}
-              disabled={props.disabled}
-              onChange={this.handleChange}
-              selected={this.state.internalValue}
-              todayButton={'Today'}
-              className="form-control"
-              isClearable={true}
-              dateFormat="MM/DD/YYYY"
-              placeholderText='mm/dd/yyyy' />
-            }
+            {this.props.data.readOnly ? (
+              <input
+                readOnly
+                type="text"
+                name={props.name}
+                ref={props.ref}
+                placeholder='mm/dd/yyyy'
+                value={this.state.value}
+                className="form-control" />
+            ) : (
+              <ReactDatePicker
+                name={props.name}
+                ref={props.ref}
+                disabled={props.disabled}
+                onChange={this.handleChange}
+                selected={this.state.internalValue}
+                todayButton={'Today'}
+                className="form-control"
+                isClearable={true}
+                dateFormat="MM/DD/YYYY"
+                placeholderText='mm/dd/yyyy' />
+            )}
           </div>
         </div>
       </RfbItem>
@@ -560,6 +550,7 @@ class Tags extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: this.props.defaultValue !== undefined ? this.props.defaultValue.split(',') : [] };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
@@ -859,6 +850,7 @@ class Camera extends React.Component {
     super(props);
     this.state = { img: null };
 
+    this.clearImage = this.clearImage.bind(this);
     this.displayImage = this.displayImage.bind(this);
   }
 
