@@ -228,15 +228,15 @@ export default class StarRating extends React.Component {
              onMouseMove={this.handleMouseMove.bind(this)}
              onMouseLeave={this.handleMouseLeave.bind(this)}
              onClick={this.handleClick.bind(this)}>
-          <div className="rating-stars" data-content={this.state.glyph} style={{width: this.state.pos}}></div>
-          <input type="number" name={this.props.name} value={this.state.ratingCache.rating} style={{display: 'none !important'}} min={this.min} max={this.max} readOnly />
+          <div className="rating-stars" data-content={this.state.glyph} style={{ width: this.state.pos }}></div>
+          <input type="number" name={this.props.name} value={this.state.ratingCache.rating} style={{ display: 'none !important'}} min={this.min} max={this.max} readOnly />
         </div>
       );
     } else {
       starRating = (
         <div ref="ratingContainer" className="rating-container rating-gly-star" data-content={this.state.glyph}>
-          <div className="rating-stars" data-content={this.state.glyph} style={{width: this.state.pos}}></div>
-          <input type="number" name={this.props.name} value={this.state.ratingCache.rating} style={{display: 'none !important'}} min={this.min} max={this.max} readOnly />
+          <div className="rating-stars" data-content={this.state.glyph} style={{ width: this.state.pos }}></div>
+          <input type="number" name={this.props.name} value={this.state.ratingCache.rating} style={{ display: 'none !important'}} min={this.min} max={this.max} readOnly />
         </div>
       );
     }
