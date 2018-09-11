@@ -15,7 +15,7 @@ export default class FormValidator extends React.Component {
 
   componentWillMount() {
     this.subscription = this.props.emitter.addListener('formValidation', errors => {
-      this.setState({errors: errors});
+      this.setState({ errors: errors });
     });
   }
 
@@ -25,12 +25,12 @@ export default class FormValidator extends React.Component {
 
   dismissModal(e) {
     e.preventDefault();
-    this.setState({errors: []});
+    this.setState({ errors: [] });
   }
 
   render() {
     let errors = this.state.errors.map((error, index) => {
-      return <li key={'error_' + index} dangerouslySetInnerHTML={{__html: myxss.process(error)}} />;
+      return <li key={'error_' + index} dangerouslySetInnerHTML={{ __html: myxss.process(error) }} />;
     });
 
     return (
@@ -44,7 +44,7 @@ export default class FormValidator extends React.Component {
             </ul>
           </div>
           <div className="clearfix">
-            <a className="pull-right btn btn-default btn-sm btn-danger" onClick={this.dismissModal.bind(this)}>Dismiss</a>
+            <a className="pull-right btn btn-sm btn-danger" onClick={this.dismissModal.bind(this)}>Dismiss</a>
           </div>
         </div>
         }
