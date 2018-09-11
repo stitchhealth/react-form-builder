@@ -47,15 +47,7 @@ export default class FormBuilderCanvas extends React.Component {
   }
 
   editModeOff(e) {
-    const $menu = $('.edit-form');
-    const $edit = $('.fa-pencil-square-o');
-
-    if (
-      !$menu.is(e.target) &&
-      !$edit.is(e.target) &&
-      $menu.has(e.target).length === 0 &&
-      $edit.has(e.target).length === 0
-    ) {
+    if ($('.edit-modal').is(e.target)) {
       this.manualEditModeOff();
     }
   }
@@ -112,7 +104,7 @@ export default class FormBuilderCanvas extends React.Component {
   }
 
   render() {
-    const { value, files, showCorrectColumn } = this.props;
+    const { value } = this.props;
     let classes = this.props.className;
     if (this.state.editMode) {
       classes += ' is-editing';
@@ -163,14 +155,33 @@ export default class FormBuilderCanvas extends React.Component {
 
     return (
       <div className={classes}>
-        <div className="edit-form">
-          {this.state.editElement !== null &&
-          <FormElementsEdit showCorrectColumn={showCorrectColumn} files={files} manualEditModeOff={this.manualEditModeOff} preview={this} element={this.state.editElement} updateElement={this.updateElement} />
-          }
-        </div>
+        {this.state.editElement !== null && this.renderEditModal()}
         <Sortable sensitivity={0} key={value.length} onSort={this.handleSort.bind(this)} direction="vertical" className="" dynamic>
           {items}
         </Sortable>
+      </div>
+    );
+  }
+
+  renderEditModal() {
+    const { files, showCorrectColumn } = this.props;
+
+    return (
+      <div role="dialog">
+        <div className="fade modal-backdrop in" />
+        <div role="dialog" tabIndex="-1" className="fade invite-people-modal in modal edit-modal">
+          <div className="modal-dialog">
+            <div className="modal-content" role="document">
+              <div className="modal-header">
+                <h4 className="modal-title pull-left">{this.state.editElement.text}</h4>
+                <a role="link" onClick={this.manualEditModeOff}><i className="pull-right fa fa-times dismiss-edit" /></a>
+              </div>
+              <div className="modal-body edit-form">
+                <FormElementsEdit showCorrectColumn={showCorrectColumn} files={files} manualEditModeOff={this.manualEditModeOff} preview={this} element={this.state.editElement} updateElement={this.updateElement} />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

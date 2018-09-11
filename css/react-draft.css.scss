@@ -1095,6 +1095,10 @@
   float: right;
 }
 
+.rdw-editor-wrapper{
+  border: 1px solid #F1F1F1;
+}
+
 .rdw-editor-main {
   height: 150px;
   width: 100%;
@@ -1106,7 +1110,7 @@
 .rdw-editor-toolbar {
   padding: 6px 5px 0;
   border-radius: 2px;
-  border: 1px solid #F1F1F1;
+  border-bottom: 1px solid #F1F1F1;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
