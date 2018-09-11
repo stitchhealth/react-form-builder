@@ -370,7 +370,7 @@ class DatePicker extends React.Component {
             }
           </label>
           <div>
-            {this.props.data.readOnly ? (
+            {this.props.read_only || this.props.data.readOnly ? (
               <input
                 readOnly
                 type="text"
@@ -467,7 +467,7 @@ class Signature extends React.Component {
 
   componentDidMount() {
     if (this.props.defaultValue !== undefined && this.props.defaultValue.length > 0 && !this.props.read_only) {
-      this.canvasRef.fromDataURL('data:image/png;base64,' + this.props.defaultValue);
+      this.canvasRef.fromDataURL(this.props.defaultValue);
     }
 
     const clearBtn = document.querySelector('.m-signature-pad--footer button');
@@ -487,7 +487,7 @@ class Signature extends React.Component {
     if (this.canvasRef.isEmpty()) {
       this.setState({ value: '' });
     } else {
-      const value = this.canvasRef.toDataURL().replace('data:image/png;base64,', '');
+      const value = this.canvasRef.toDataURL();
       this.setState({ value });
     }
   }
@@ -513,7 +513,7 @@ class Signature extends React.Component {
 
     let sourceDataURL = false;
     if (this.props.read_only === true && this.props.defaultValue && this.props.defaultValue.length > 0) {
-      sourceDataURL = `data:image/png;base64,${this.props.defaultValue}`;
+      sourceDataURL = this.props.defaultValue;
     }
 
     return (
@@ -856,10 +856,12 @@ class Download extends React.Component {
 class Camera extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { img: null };
+
+    this.state = { value: props.defaultValue || '' };
 
     this.clearImage = this.clearImage.bind(this);
     this.displayImage = this.displayImage.bind(this);
+    this.openInNewWindow = this.openInNewWindow.bind(this);
   }
 
   displayImage(e) {
@@ -874,7 +876,7 @@ class Camera extends React.Component {
 
       reader.onloadend = function() {
         self.setState({
-          img: reader.result,
+          value: reader.result,
         });
       };
     }
@@ -882,11 +884,22 @@ class Camera extends React.Component {
 
   clearImage() {
     this.setState({
-      img: null,
+      value: '',
     });
   }
 
+  openInNewWindow() {
+    const win = window.open();
+    const style = 'border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;';
+    win.document.write(`<iframe src="${this.state.value}" frameborder="0" style="${style}" allowfullscreen></iframe>`);
+  }
+
   render() {
+    let hidden_props = {};
+    hidden_props.type = 'hidden';
+    hidden_props.value = this.state.value || '';
+    hidden_props.name = this.props.data.field_name;
+
     return (
       <RfbItem
         style={this.props.style}
@@ -912,7 +925,7 @@ class Camera extends React.Component {
           </label>
           <div className="image-upload-container">
 
-            {!this.state.img &&
+            {!this.props.read_only && !this.state.value &&
             <div>
               <input type="file" accept="image/*" capture="camera" className="image-upload" onChange={this.displayImage} />
               <div className="image-upload-control">
@@ -922,15 +935,22 @@ class Camera extends React.Component {
             </div>
             }
 
-            {this.state.img &&
+            {this.props.read_only && !this.state.value &&
+            <div className="no-image">No Image</div>
+            }
+
+            {this.state.value &&
             <div>
-              <img src={this.state.img} height="100" className="image-upload-preview" /><br />
+              <img src={this.state.value} height="100" className="image-upload-preview" onClick={this.openInNewWindow} /><br />
+              {!this.props.read_only &&
               <div className="btn btn-school btn-image-clear" onClick={this.clearImage}>
                 <i className="fa fa-times"></i> Clear Photo
               </div>
+              }
             </div>
             }
 
+            {this.props.mutable && !this.props.read_only && (<input {...hidden_props} />)}
           </div>
         </div>
       </RfbItem>
