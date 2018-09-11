@@ -25,10 +25,6 @@ export default class FormElementsEdit extends React.Component {
     };
   }
 
-  toggleRequired() {
-    let this_element = this.state.element;
-  }
-
   editElementProp(elemProperty, targProperty, e) {
     // elemProperty could be content or label
     // targProperty could be value or checked
@@ -61,7 +57,7 @@ export default class FormElementsEdit extends React.Component {
     // to prevent ajax calls with no change
     if (this.state.dirty) {
       this.props.updateElement.call(this.props.preview, this_element);
-      this.setState({dirty: false});
+      this.setState({ dirty: false });
     }
   }
 
@@ -78,7 +74,7 @@ export default class FormElementsEdit extends React.Component {
 
     let this_files = this.props.files.length ? this.props.files : [];
     if (this_files.length < 1 || this_files.length > 0 && this_files[0].id !== '')
-      this_files.unshift({id: '', file_name: ''});
+      this_files.unshift({ id: '', file_name: '' });
 
     if (this.props.element.hasOwnProperty('content')) {
       const isEmpty = this.props.element.content.trim() === '<div></div>';
@@ -98,7 +94,7 @@ export default class FormElementsEdit extends React.Component {
       <div>
         <div className="clearfix">
           <h4 className="pull-left">{this.props.element.text}</h4>
-          <i className="pull-right fa fa-times dismiss-edit" onClick={this.props.manualEditModeOff}></i>
+          <i className="pull-right fa fa-times dismiss-edit" onClick={this.props.manualEditModeOff} />
         </div>
         {this.props.element.hasOwnProperty('content') &&
         <div className="form-group">
@@ -253,11 +249,11 @@ export default class FormElementsEdit extends React.Component {
           </div>
         </div>
         }
-        {this.props.element.hasOwnProperty('default_value') &&
+        {this.props.element.hasOwnProperty('defaultValue') &&
         <div className="form-group">
           <div className="form-group-range">
             <label className="control-label" htmlFor="defaultSelected">Default Selected</label>
-            <input id="defaultSelected" type="number" className="form-control" defaultValue={this.props.element.default_value} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'default_value', 'value')} />
+            <input id="defaultSelected" type="number" className="form-control" defaultValue={this.props.element.defaultValue} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'defaultValue', 'value')} />
           </div>
         </div>
         }
@@ -286,11 +282,15 @@ export default class FormElementsEdit extends React.Component {
         </div>
         }
         {this.props.element.hasOwnProperty('options') &&
-        <DynamicOptionList showCorrectColumn={this.props.showCorrectColumn} data={this.props.preview.state.data} updateElement={this.props.updateElement} preview={this.props.preview} element={this.props.element} key={this.props.element.options.length} />
+        <DynamicOptionList showCorrectColumn={this.props.showCorrectColumn} showOptionValue={this.props.showOptionValue} data={this.props.preview.state.data} updateElement={this.props.updateElement} preview={this.props.preview} element={this.props.element} key={this.props.element.options.length} />
         }
       </div>
     );
   }
 }
 
-FormElementsEdit.defaultProps = {className: 'edit-element-fields'};
+FormElementsEdit.defaultProps = {
+  className: 'edit-element-fields',
+  showCorrectColumn: false,
+  showOptionValue: false,
+};

@@ -4,6 +4,7 @@
 
 import React from 'react';
 import uuid from 'uuid/v4';
+import cx from 'classnames';
 
 export default class DynamicOptionList extends React.Component {
   constructor(props) {
@@ -16,12 +17,12 @@ export default class DynamicOptionList extends React.Component {
   }
 
   _setValue(text) {
-    return text.replace(/[^A-Z0-9]+/ig, '_').toLowerCase();
+    return text.replace(/\s+/ig, '_').toLowerCase();
   }
 
   editOption(option_index, e) {
-    let this_element = this.state.element;
-    let val = (this_element.options[option_index].value !== this._setValue(this_element.options[option_index].text)) ? this_element.options[option_index].value : this._setValue(e.target.value);
+    const this_element = this.state.element;
+    const val = (this_element.options[option_index].value !== this._setValue(this_element.options[option_index].text)) ? this_element.options[option_index].value : this._setValue(e.target.value);
 
     this_element.options[option_index].text = e.target.value;
     this_element.options[option_index].value = val;
@@ -32,8 +33,8 @@ export default class DynamicOptionList extends React.Component {
   }
 
   editValue(option_index, e) {
-    let this_element = this.state.element;
-    let val = (e.target.value === '') ? this._setValue(this_element.options[option_index].text) : e.target.value;
+    const this_element = this.state.element;
+    const val = e.target.value || this._setValue(this_element.options[option_index].text);
     this_element.options[option_index].value = val;
     this.setState({
       element: this_element,
@@ -80,23 +81,32 @@ export default class DynamicOptionList extends React.Component {
           <li>
             <div className="row">
               <div className="col-sm-6"><b>Options</b></div>
-              <div className="col-sm-2"><b>Value</b></div>
+              {this.props.showOptionValues && <div className="col-sm-2"><b>Value</b></div>}
               {this.props.showCorrectColumn && <div className="col-sm-4"><b>Correct</b></div>}
             </div>
           </li>
           {
             this.props.element.options.map((option, index) => {
-              let this_key = 'edit_' + option.key;
-              let val = (option.value !== this._setValue(option.text)) ? option.value : '';
+              const this_key = 'edit_' + option.key;
+              const val = option.value || '';
+              const optionClassName = cx({
+                'col-sm-6': this.props.showOptionValues && this.props.showCorrectColumn,
+                'col-sm-7': !this.props.showOptionValues && this.props.showCorrectColumn,
+                'col-sm-8': this.props.showOptionValues && !this.props.showCorrectColumn,
+                'col-sm-9': !this.props.showOptionValues && !this.props.showCorrectColumn,
+              });
+
               return (
                 <li className="clearfix" key={this_key}>
                   <div className="row">
-                    <div className="col-sm-6">
+                    <div className={optionClassName}>
                       <input tabIndex={index + 1} className="form-control" style={{ width: '100%' }} type="text" name={'text_' + index} placeholder="Option text" value={option.text} onBlur={this.updateOption.bind(this)} onChange={this.editOption.bind(this, index)} />
                     </div>
-                    <div className="col-sm-2">
-                      <input className="form-control" type="text" name={'value_' + index} value={val} onChange={this.editValue.bind(this, index)} />
-                    </div>
+                    {this.props.showOptionValues && (
+                      <div className="col-sm-2">
+                        <input className="form-control" type="text" name={'value_' + index} value={val} onChange={this.editValue.bind(this, index)} />
+                      </div>
+                    )}
                     {this.props.showCorrectColumn && (
                       <div className="col-sm-1">
                         <input className="form-control" type="checkbox" value="1" onChange={this.editOptionCorrect.bind(this, index)} checked={option.hasOwnProperty('correct')} />
@@ -104,9 +114,9 @@ export default class DynamicOptionList extends React.Component {
                     )}
                     <div className="col-sm-3">
                       <div className="dynamic-options-actions-buttons">
-                        <button onClick={this.addOption.bind(this, index)} className="btn btn-success"><i className="fa fa-plus-circle"></i></button>
+                        <button onClick={this.addOption.bind(this, index)} className="btn btn-success"><i className="fa fa-plus-circle" /></button>
                         {index > 0 &&
-                        <button onClick={this.removeOption.bind(this, index)} className="btn btn-danger"><i className="fa fa-minus-circle"></i></button>
+                        <button onClick={this.removeOption.bind(this, index)} className="btn btn-danger"><i className="fa fa-minus-circle" /></button>
                         }
                       </div>
                     </div>

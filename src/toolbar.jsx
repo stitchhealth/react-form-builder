@@ -22,9 +22,9 @@ export default class Toolbar extends React.Component {
     switch (element) {
       case 'Dropdown':
         return [
-          { value: '1', text: 'Place holder option 1', key: 'dropdown_option_' + uuid() },
-          { value: '2', text: 'Place holder option 2', key: 'dropdown_option_' + uuid() },
-          { value: '3', text: 'Place holder option 3', key: 'dropdown_option_' + uuid() },
+          { value: 'place_holder_option_1', text: 'Place holder option 1', key: 'dropdown_option_' + uuid() },
+          { value: 'place_holder_option_2', text: 'Place holder option 2', key: 'dropdown_option_' + uuid() },
+          { value: 'place_holder_option_3', text: 'Place holder option 3', key: 'dropdown_option_' + uuid() },
         ];
       case 'Tags':
         return [
@@ -196,7 +196,7 @@ export default class Toolbar extends React.Component {
         label: 'Placeholder Label',
         field_name: 'range_',
         step: 1,
-        default_value: 3,
+        defaultValue: 3,
         min_value: 1,
         max_value: 5,
         min_label: 'Easy',
@@ -252,7 +252,7 @@ export default class Toolbar extends React.Component {
 
     if (item.key === 'Range') {
       elementOptions['step'] = item.step;
-      elementOptions['default_value'] = item.default_value;
+      elementOptions['defaultValue'] = item.defaultValue;
       elementOptions['min_value'] = item.min_value;
       elementOptions['max_value'] = item.max_value;
       elementOptions['min_label'] = item.min_label;

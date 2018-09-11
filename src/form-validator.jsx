@@ -39,7 +39,7 @@ export default class FormValidator extends React.Component {
         <div className="alert alert-danger validation-error">
           <div className="clearfix">
             <i className="fa fa-exclamation-triangle pull-left"></i>
-            <ul className="pull-left">
+            <ul className="pull-left validation-errors">
               {errors}
             </ul>
           </div>

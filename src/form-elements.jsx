@@ -415,6 +415,11 @@ class Dropdown extends React.Component {
       props.disabled = 'disabled';
     }
 
+    const options = this.props.data.options.slice();
+    if (options.length < 1 || options[0].value !== '') {
+      options.unshift({ text: '', label: '', value: '' });
+    }
+
     return (
       <RfbItem
         style={this.props.style}
@@ -439,7 +444,7 @@ class Dropdown extends React.Component {
             }
           </label>
           <select {...props}>
-            {this.props.data.options.map(function(option) {
+            {options.map(function(option) {
               let this_key = 'preview_' + option.key;
               return <option value={option.value} key={this_key}>{option.text}</option>;
             })}
@@ -497,7 +502,7 @@ class Signature extends React.Component {
   render() {
     let props = {};
     props.type = 'hidden';
-    props.value = this.state.value;
+    props.value = this.state.value || '';
     props.name = this.props.data.field_name;
 
     let pad_props = {};
@@ -506,7 +511,7 @@ class Signature extends React.Component {
       pad_props.defaultValue = this.props.defaultValue;
     }
 
-    let sourceDataURL;
+    let sourceDataURL = false;
     if (this.props.read_only === true && this.props.defaultValue && this.props.defaultValue.length > 0) {
       sourceDataURL = `data:image/png;base64,${this.props.defaultValue}`;
     }
@@ -534,11 +539,10 @@ class Signature extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          {this.props.read_only === true && this.props.defaultValue && this.props.defaultValue.length > 0
-            ? (<div><img src={sourceDataURL} /></div>)
-            : (<SignaturePad {...pad_props} ref={(ref) => this.canvasRef = ref} onEnd={this._setDataUrl} />)
-          }
-          <input {...props} />
+          {this.props.read_only === true && sourceDataURL && <div><img src={sourceDataURL} /></div>}
+          {this.props.read_only === true && !sourceDataURL && <div className="no-signature">No Signature</div>}
+          {!this.props.read_only && (<SignaturePad {...pad_props} ref={(ref) => this.canvasRef = ref} onEnd={this._setDataUrl} />)}
+          {!this.props.read_only && (<input {...props} />)}
         </div>
       </RfbItem>
     );
@@ -562,6 +566,10 @@ class Tags extends React.Component {
       option.label = option.text;
       return option;
     });
+
+    if (options.length < 1 || options[0].value !== '') {
+      options.unshift({ text: '', label: '', value: '' });
+    }
 
     let props = {};
     props.multi = true;
@@ -932,7 +940,31 @@ class Camera extends React.Component {
 
 @sortable
 class Range extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { value: this.getDefaultValue(props) };
+    this.onChangeValue = this.onChangeValue.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ value: this.getDefaultValue(nextProps) });
+  }
+
+  getDefaultValue({ defaultValue, data }) {
+    return parseInt(defaultValue !== undefined ? defaultValue : data.defaultValue, 10);
+  }
+
+  onChangeValue(e) {
+    this.setState({ value: e.target.value });
+  }
+
   render() {
+    let hidden_props = {};
+    hidden_props.type = 'hidden';
+    hidden_props.value = this.state.value || '';
+    hidden_props.name = this.props.data.field_name;
+
     let props = {};
     props.type = 'range';
     props.name = this.props.data.field_name;
@@ -940,8 +972,7 @@ class Range extends React.Component {
     props.min = this.props.data.min_value;
     props.max = this.props.data.max_value;
     props.step = this.props.data.step;
-
-    props.defaultValue = this.props.defaultValue !== undefined ? parseInt(this.props.defaultValue, 10) : parseInt(this.props.data.default_value, 10);
+    props.value = this.state.value;
 
     if (this.props.mutable) {
       props.ref = 'child_ref_' + this.props.data.field_name;
@@ -1004,7 +1035,8 @@ class Range extends React.Component {
             </div>
             <ReactBootstrapSlider
               name={props.name}
-              value={props.defaultValue}
+              value={props.value}
+              change={this.onChangeValue}
               step={this.props.data.step}
               max={this.props.data.max_value}
               min={this.props.data.min_value}
@@ -1016,6 +1048,7 @@ class Range extends React.Component {
           <datalist id={props.list}>
             {_datalist}
           </datalist>
+          {this.props.mutable && !this.props.read_only && (<input {...hidden_props} />)}
         </div>
       </RfbItem>
     );
