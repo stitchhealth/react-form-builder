@@ -19,30 +19,30 @@ export default class Toolbar extends React.Component {
   }
 
   _defaultItemOptions(element) {
-    switch(element) {
+    switch (element) {
       case 'Dropdown':
         return [
-          {value: '', text: '', key: 'dropdown_option_' + uuid()},
-          {value: '', text: '', key: 'dropdown_option_' + uuid()},
-          {value: '', text: '', key: 'dropdown_option_' + uuid()},
+          { value: '1', text: 'Place holder option 1', key: 'dropdown_option_' + uuid() },
+          { value: '2', text: 'Place holder option 2', key: 'dropdown_option_' + uuid() },
+          { value: '3', text: 'Place holder option 3', key: 'dropdown_option_' + uuid() },
         ];
       case 'Tags':
         return [
-          {value: 'place_holder_tag_1', text: 'Place holder tag 1', key: 'tags_option_' + uuid()},
-          {value: 'place_holder_tag_2', text: 'Place holder tag 2', key: 'tags_option_' + uuid()},
-          {value: 'place_holder_tag_3', text: 'Place holder tag 3', key: 'tags_option_' + uuid()},
+          { value: 'place_holder_tag_1', text: 'Place holder tag 1', key: 'tags_option_' + uuid() },
+          { value: 'place_holder_tag_2', text: 'Place holder tag 2', key: 'tags_option_' + uuid() },
+          { value: 'place_holder_tag_3', text: 'Place holder tag 3', key: 'tags_option_' + uuid() },
         ];
       case 'Checkboxes':
         return [
-          {value: 'place_holder_option_1', text: 'Place holder option 1', key: 'checkboxes_option_' + uuid()},
-          {value: 'place_holder_option_2', text: 'Place holder option 2', key: 'checkboxes_option_' + uuid()},
-          {value: 'place_holder_option_3', text: 'Place holder option 3', key: 'checkboxes_option_' + uuid()},
+          { value: 'place_holder_option_1', text: 'Place holder option 1', key: 'checkboxes_option_' + uuid() },
+          { value: 'place_holder_option_2', text: 'Place holder option 2', key: 'checkboxes_option_' + uuid() },
+          { value: 'place_holder_option_3', text: 'Place holder option 3', key: 'checkboxes_option_' + uuid() },
         ];
       case 'RadioButtons':
         return [
-          {value: 'place_holder_option_1', text: 'Place holder option 1', key: 'radiobuttons_option_' + uuid()},
-          {value: 'place_holder_option_2', text: 'Place holder option 2', key: 'radiobuttons_option_' + uuid()},
-          {value: 'place_holder_option_3', text: 'Place holder option 3', key: 'radiobuttons_option_' + uuid()},
+          { value: 'place_holder_option_1', text: 'Place holder option 1', key: 'radiobuttons_option_' + uuid() },
+          { value: 'place_holder_option_2', text: 'Place holder option 2', key: 'radiobuttons_option_' + uuid() },
+          { value: 'place_holder_option_3', text: 'Place holder option 3', key: 'radiobuttons_option_' + uuid() },
         ];
       default:
         return [];

@@ -23,7 +23,7 @@ export default class FormGenerator extends React.Component {
     return defaultChecked;
   }
 
-  _isIncorrect(item) {
+  _isIncorrect(item, answer_data) {
     let incorrect = false;
     if (item.canHaveAnswer) {
       if (item.element === 'Checkboxes' || item.element === 'RadioButtons') {
@@ -62,53 +62,26 @@ export default class FormGenerator extends React.Component {
     return incorrect;
   }
 
-  _isInvalid(item) {
-    let invalid = false;
+  _isInvalid(item, answer_data) {
     if (item.required === true) {
-      if (item.element === 'Checkboxes' || item.element === 'RadioButtons') {
-        let checked_options = 0;
-        item.options.forEach(option => {
-          let $option = ReactDOM.findDOMNode(this.refs[item.field_name].refs[`child_ref_${option.key}`]);
-          if ($option.checked) {
-            checked_options += 1;
-          }
-        });
-        if (checked_options < 1) {
-          // errors.push(item.label + ' is required!');
-          invalid = true;
-        }
-      } else {
-        let $item = null;
-        if (item.element === 'Rating') {
-          $item = {};
-          $item.value = this.refs[item.field_name].refs[`child_ref_${item.field_name}`].state.rating;
-          if ($item.value === 0) {
-            invalid = true;
-          }
-        } else {
-          if (item.element === 'Tags') {
-            $item = {};
-            $item.value = this.refs[item.field_name].refs[`child_ref_${item.field_name}`].state.value;
-          } else if (item.element === 'DatePicker') {
-            $item = {};
-            $item.value = this.refs[item.field_name].state.value;
-          } else {
-            $item = ReactDOM.findDOMNode(this.refs[item.field_name].refs[`child_ref_${item.field_name}`]);
-            $item.value = $item.value.trim();
-          }
-
-          if ($item.value === undefined || $item.value.length < 1) {
-            invalid = true;
-          }
-        }
-      }
+      return answer_data[item.field_name] === undefined ||
+        answer_data[item.field_name] === '' ||
+        answer_data[item.field_name] === null;
+    } else {
+      return false;
     }
-    return invalid;
+
   }
 
   getFormData() {
-    let $form = $(ReactDOM.findDOMNode(this.refs.form));
-    let errors = this.validateForm();
+    const $form = $(ReactDOM.findDOMNode(this.refs.form));
+
+    const answer_data = {};
+    $form.serializeArray().forEach(({ name, value }) => {
+      answer_data[name] = value;
+    });
+
+    const errors = this.validateForm(answer_data);
 
     // Publish errors, if any.
     this.emitter.emit('formValidation', errors);
@@ -117,25 +90,20 @@ export default class FormGenerator extends React.Component {
     if (errors.length) {
       return { valid: false, errors: errors };
     } else {
-      const data = {};
-      $form.serializeArray().forEach(({ name, value }) => {
-        data[name] = value;
-      });
-
-      return { valid: true, data: data };
+      return { valid: true, data: answer_data };
     }
   }
 
-  validateForm() {
+  validateForm(answer_data) {
     let errors = [];
     let data_items = this.props.data;
 
     data_items.forEach(item => {
-      if (this._isInvalid(item)) {
+      if (this._isInvalid(item, answer_data)) {
         errors.push(`${item.label} is required!`);
       }
 
-      if (this.props.validateForCorrectness && this._isIncorrect(item)) {
+      if (this.props.validateForCorrectness && this._isIncorrect(item, answer_data)) {
         errors.push(`${item.label} was answered incorrectly!`);
       }
     });
