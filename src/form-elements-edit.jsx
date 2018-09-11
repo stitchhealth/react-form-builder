@@ -71,6 +71,7 @@ export default class FormElementsEdit extends React.Component {
     let this_checked_center = this.props.element.hasOwnProperty('center') ? this.props.element.center : false;
     let this_checked_page_break = this.props.element.hasOwnProperty('pageBreakBefore') ? this.props.element.pageBreakBefore : false;
     let this_checked_alternate_form = this.props.element.hasOwnProperty('alternateForm') ? this.props.element.alternateForm : false;
+    let this_checked_multi_selection = this.props.element.hasOwnProperty('isMulti') ? this.props.element.isMulti : false;
 
     let this_files = this.props.files.length ? this.props.files : [];
     if (this_files.length < 1 || this_files.length > 0 && this_files[0].id !== '')
@@ -182,6 +183,14 @@ export default class FormElementsEdit extends React.Component {
             <label>
               <input type="checkbox" checked={this_checked_inline} value={true} onChange={this.editElementProp.bind(this, 'inline', 'checked')} />
               Display horizonal
+            </label>
+          </div>
+          }
+          {(this.state.element.element === 'Dropdown') &&
+          <div className="checkbox">
+            <label>
+              <input type="checkbox" checked={this_checked_multi_selection} value={true} onChange={this.editElementProp.bind(this, 'isMulti', 'checked')} />
+              Allow multi selection
             </label>
           </div>
           }

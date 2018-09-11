@@ -400,62 +400,6 @@ class DatePicker extends React.Component {
 }
 
 @sortable
-class Dropdown extends React.Component {
-  render() {
-    let props = {};
-    props.className = 'form-control';
-    props.name = this.props.data.field_name;
-
-    if (this.props.mutable) {
-      props.defaultValue = this.props.defaultValue;
-      props.ref = 'child_ref_' + this.props.data.field_name;
-    }
-
-    if (this.props.read_only) {
-      props.disabled = 'disabled';
-    }
-
-    const options = this.props.data.options.slice();
-    if (options.length < 1 || options[0].value !== '') {
-      options.unshift({ text: '', label: '', value: '' });
-    }
-
-    return (
-      <RfbItem
-        style={this.props.style}
-        className={this.props.className}
-        onMouseDown={this.props.onMouseDown}
-        onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
-      >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
-        <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
-          <select {...props}>
-            {options.map(function(option) {
-              let this_key = 'preview_' + option.key;
-              return <option value={option.value} key={this_key}>{option.text}</option>;
-            })}
-          </select>
-        </div>
-      </RfbItem>
-    );
-  }
-}
-
-@sortable
 class Signature extends React.Component {
   constructor(props) {
     super(props);
@@ -550,10 +494,18 @@ class Signature extends React.Component {
 }
 
 @sortable
-class Tags extends React.Component {
+class Dropdown extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: this.props.defaultValue !== undefined ? this.props.defaultValue.split(',') : [] };
+
+    let value = [];
+    try {
+      value = JSON.parse(this.props.defaultValue) || [];
+    } catch (e) {
+      // Do nothing
+    }
+
+    this.state = { value };
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -562,24 +514,27 @@ class Tags extends React.Component {
   }
 
   render() {
-    let options = this.props.data.options.map(option => {
-      option.label = option.text;
-      return option;
-    });
+    let hidden_props = {};
+    hidden_props.type = 'hidden';
+    hidden_props.name = this.props.data.field_name;
+    hidden_props.value = this.state.value.length ? JSON.stringify(this.state.value) : '';
 
-    if (options.length < 1 || options[0].value !== '') {
-      options.unshift({ text: '', label: '', value: '' });
+    const options = this.props.data.options.map(({ value, text }) => ({ value, label: text }));
+
+    if (options.length < 1 || (!this.props.data.isMulti && options[0].value !== '')) {
+      options.unshift({ value: '', label: '' });
     }
 
     let props = {};
-    props.multi = true;
+    props.isSearchable = true;
+    props.isMulti = this.props.data.isMulti;
     props.name = this.props.data.field_name;
     props.onChange = this.handleChange;
     props.options = options;
     props.isDisabled = this.props.read_only;
 
     if (!this.props.mutable) {
-      props.value = options[0].text;
+      props.value = options[1];
     } // to show a sample of what tags looks like
 
     if (this.props.mutable) {
@@ -611,6 +566,7 @@ class Tags extends React.Component {
             }
           </label>
           <Select {...props} />
+          {this.props.mutable && !this.props.read_only && (<input {...hidden_props} />)}
         </div>
       </RfbItem>
     );
@@ -1083,14 +1039,13 @@ export {
   TextInput,
   NumberInput,
   TextArea,
-  Dropdown,
   Signature,
   Checkboxes,
   DatePicker,
   RadioButtons,
   Image,
   Rating,
-  Tags,
+  Dropdown,
   HyperLink,
   Download,
   Camera,

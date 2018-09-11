@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { EventEmitter } from 'fbemitter';
 import FormValidator from './form-validator';
-import { Camera, Checkboxes, DatePicker, Download, Dropdown, Header, HyperLink, Image, Label, LineBreak, NumberInput, Paragraph, RadioButtons, Range, Rating, Signature, Tags, TextArea, TextInput } from './form-elements';
+import { Camera, Checkboxes, DatePicker, Download, Dropdown, Header, HyperLink, Image, Label, LineBreak, NumberInput, Paragraph, RadioButtons, Range, Rating, Signature, TextArea, TextInput } from './form-elements';
 
 export default class FormGenerator extends React.Component {
   constructor(props) {
@@ -42,7 +42,7 @@ export default class FormGenerator extends React.Component {
             incorrect = true;
           }
         } else {
-          if (item.element === 'Tags') {
+          if (item.element === 'Dropdown') {
             $item = {};
             $item.value = this.refs[item.field_name].refs[`child_ref_${item.field_name}`].state.value;
           } else if (item.element === 'DatePicker') {
@@ -146,8 +146,6 @@ export default class FormGenerator extends React.Component {
           return <Rating ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Image':
           return <Image ref={item.field_name} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
-        case 'Tags':
-          return <Tags ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Signature':
           return <Signature ref={item.field_name} read_only={this.props.read_only || item.readOnly} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'HyperLink':

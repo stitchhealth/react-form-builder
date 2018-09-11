@@ -26,12 +26,6 @@ export default class Toolbar extends React.Component {
           { value: 'place_holder_option_2', text: 'Place holder option 2', key: 'dropdown_option_' + uuid() },
           { value: 'place_holder_option_3', text: 'Place holder option 3', key: 'dropdown_option_' + uuid() },
         ];
-      case 'Tags':
-        return [
-          { value: 'place_holder_tag_1', text: 'Place holder tag 1', key: 'tags_option_' + uuid() },
-          { value: 'place_holder_tag_2', text: 'Place holder tag 2', key: 'tags_option_' + uuid() },
-          { value: 'place_holder_tag_3', text: 'Place holder tag 3', key: 'tags_option_' + uuid() },
-        ];
       case 'Checkboxes':
         return [
           { value: 'place_holder_option_1', text: 'Place holder option 1', key: 'checkboxes_option_' + uuid() },
@@ -85,15 +79,6 @@ export default class Toolbar extends React.Component {
         icon: 'fa fa-caret-square-o-down',
         label: 'Placeholder Label',
         field_name: 'dropdown_',
-        options: [],
-      },
-      {
-        key: 'Tags',
-        canHaveAnswer: true,
-        name: 'Tags',
-        icon: 'fa fa-tags',
-        label: 'Placeholder Label',
-        field_name: 'tags_',
         options: [],
       },
       {

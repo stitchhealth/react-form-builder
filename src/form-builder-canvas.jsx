@@ -7,7 +7,7 @@ import Sortable from 'react-anything-sortable';
 import ElementStore from './stores/ElementStore';
 import ElementActions from './actions/ElementActions';
 import FormElementsEdit from './form-elements-edit';
-import { Camera, Checkboxes, DatePicker, Download, Dropdown, Header, HyperLink, Image, Label, LineBreak, NumberInput, Paragraph, RadioButtons, Range, Rating, Signature, Tags, TextArea, TextInput } from './form-elements';
+import { Camera, Checkboxes, DatePicker, Download, Dropdown, Header, HyperLink, Image, Label, LineBreak, NumberInput, Paragraph, RadioButtons, Range, Rating, Signature, TextArea, TextInput } from './form-elements';
 
 export default class FormBuilderCanvas extends React.Component {
   constructor(props) {
@@ -138,8 +138,6 @@ export default class FormBuilderCanvas extends React.Component {
           return <Rating mutable={false} editModeOn={this.editModeOn} isDraggable={true} key={item.id} sortData={item.id} data={item} _onDestroy={this._onDestroy} />;
         case 'Image':
           return <Image mutable={false} editModeOn={this.editModeOn} isDraggable={true} key={item.id} sortData={item.id} data={item} _onDestroy={this._onDestroy} />;
-        case 'Tags':
-          return <Tags mutable={false} editModeOn={this.editModeOn} isDraggable={true} key={item.id} sortData={item.id} data={item} _onDestroy={this._onDestroy} />;
         case 'Signature':
           return <Signature mutable={false} editModeOn={this.editModeOn} isDraggable={true} key={item.id} sortData={item.id} data={item} read_only={item.readOnly} defaultValue={undefined} _onDestroy={this._onDestroy} />;
         case 'HyperLink':
