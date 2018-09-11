@@ -73,7 +73,7 @@ export default class FormGenerator extends React.Component {
 
   }
 
-  getFormData() {
+  getFormData(validate = true) {
     const $form = $(ReactDOM.findDOMNode(this.refs.form));
 
     const answer_data = {};
@@ -81,17 +81,15 @@ export default class FormGenerator extends React.Component {
       answer_data[name] = value;
     });
 
-    const errors = this.validateForm(answer_data);
+    let errors = [];
+    if (validate) {
+      errors = this.validateForm(answer_data);
 
-    // Publish errors, if any.
-    this.emitter.emit('formValidation', errors);
-
-    // Only submit if there are no errors.
-    if (errors.length) {
-      return { valid: false, errors: errors };
-    } else {
-      return { valid: true, data: answer_data };
+      // Publish errors, if any.
+      this.emitter.emit('formValidation', errors);
     }
+
+    return { valid: errors.length === 0, errors: errors, data: answer_data };
   }
 
   validateForm(answer_data) {
