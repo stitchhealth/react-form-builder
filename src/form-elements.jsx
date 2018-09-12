@@ -517,7 +517,12 @@ class Dropdown extends React.Component {
     let hidden_props = {};
     hidden_props.type = 'hidden';
     hidden_props.name = this.props.data.field_name;
-    hidden_props.value = this.state.value.length ? JSON.stringify(this.state.value) : '';
+
+    if (this.props.data.isMulti) {
+      hidden_props.value = this.state.value.length ? JSON.stringify(this.state.value) : '';
+    } else {
+      hidden_props.value = Object.keys(this.state.value).length ? JSON.stringify(this.state.value) : '';
+    }
 
     const options = this.props.data.options.map(({ value, text }) => ({ value, label: text }));
 
@@ -534,7 +539,7 @@ class Dropdown extends React.Component {
     props.isDisabled = this.props.read_only;
 
     if (!this.props.mutable) {
-      props.value = options[1];
+      props.value = options[this.props.data.isMulti ? 0 : 1];
     } // to show a sample of what tags looks like
 
     if (this.props.mutable) {
