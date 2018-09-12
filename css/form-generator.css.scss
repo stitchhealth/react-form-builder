@@ -71,6 +71,12 @@ input[type="date"] {
       line-height: 190px;
     }
 
+    .responsive-signature {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
     .form-group {
       .option-inline {
         display: inline-block !important;
@@ -80,7 +86,7 @@ input[type="date"] {
       a {
         cursor: pointer;
       }
-      input[type='date'] {
+      input[type="date"] {
         height: 42px;
       }
       .m-signature-pad {
@@ -90,7 +96,8 @@ input[type="date"] {
       .react-star-rating {
         display: block;
       }
-      .checkbox-label, .radio-label {
+      .checkbox-label,
+      .radio-label {
         font-weight: normal;
         display: block;
       }

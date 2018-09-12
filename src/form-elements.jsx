@@ -483,7 +483,7 @@ class Signature extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          {this.props.read_only === true && sourceDataURL && <div><img src={sourceDataURL} /></div>}
+          {this.props.read_only === true && sourceDataURL && <div><img src={sourceDataURL} className="responsive-signature" /></div>}
           {this.props.read_only === true && !sourceDataURL && <div className="no-signature">No Signature</div>}
           {!this.props.read_only && (<SignaturePad {...pad_props} ref={(ref) => this.canvasRef = ref} onEnd={this._setDataUrl} />)}
           {!this.props.read_only && (<input {...props} />)}
