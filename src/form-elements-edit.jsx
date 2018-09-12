@@ -208,25 +208,29 @@ export default class FormElementsEdit extends React.Component {
           : (<div />)
         }
 
-        <div className="form-group">
-          <label className="control-label">Print Options</label>
-          <div className="checkbox">
-            <label>
-              <input type="checkbox" checked={this_checked_page_break} value={true} onChange={this.editElementProp.bind(this, 'pageBreakBefore', 'checked')} />
-              Page Break Before Element?
-            </label>
+        {this.props.showPrintOptions &&
+        <span>
+          <div className="form-group">
+            <label className="control-label">Print Options</label>
+            <div className="checkbox">
+              <label>
+                <input type="checkbox" checked={this_checked_page_break} value={true} onChange={this.editElementProp.bind(this, 'pageBreakBefore', 'checked')} />
+                Page Break Before Element?
+              </label>
+            </div>
           </div>
-        </div>
 
-        <div className="form-group">
-          <label className="control-label">Alternate/Signature Page</label>
-          <div className="checkbox">
-            <label>
-              <input type="checkbox" checked={this_checked_alternate_form} value={true} onChange={this.editElementProp.bind(this, 'alternateForm', 'checked')} />
-              Display on alternate/signature Page?
-            </label>
+          <div className="form-group">
+            <label className="control-label">Alternate/Signature Page</label>
+            <div className="checkbox">
+              <label>
+                <input type="checkbox" checked={this_checked_alternate_form} value={true} onChange={this.editElementProp.bind(this, 'alternateForm', 'checked')} />
+                Display on alternate/signature Page?
+              </label>
+            </div>
           </div>
-        </div>
+        </span>
+        }
 
         {this.props.element.hasOwnProperty('step') &&
         <div className="form-group">
@@ -262,7 +266,7 @@ export default class FormElementsEdit extends React.Component {
           </div>
         </div>
         }
-        {this.props.element.hasOwnProperty('static') && this.props.element.static &&
+        {this.props.showTextStyleOptions && this.props.element.hasOwnProperty('static') && this.props.element.static &&
         <div className="form-group">
           <label className="control-label">Text Style</label>
           <div className="checkbox">
@@ -296,6 +300,8 @@ export default class FormElementsEdit extends React.Component {
 
 FormElementsEdit.defaultProps = {
   className: 'edit-element-fields',
+  showTextStyleOptions: false,
   showCorrectColumn: false,
+  showPrintOptions: false,
   showOptionValue: false,
 };
