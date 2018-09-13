@@ -150,7 +150,6 @@ export default class Toolbar extends React.Component {
       },
       {
         key: 'Signature',
-        canReadOnly: true,
         name: 'Signature',
         icon: 'fa fa-pencil-square-o',
         label: 'Signature',
@@ -237,7 +236,6 @@ export default class Toolbar extends React.Component {
 
     if (item.key === 'Range') {
       elementOptions['step'] = item.step;
-      elementOptions['defaultValue'] = item.defaultValue;
       elementOptions['min_value'] = item.min_value;
       elementOptions['max_value'] = item.max_value;
       elementOptions['min_label'] = item.min_label;

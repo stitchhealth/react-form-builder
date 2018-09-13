@@ -411,7 +411,7 @@ class Signature extends React.Component {
 
   componentDidMount() {
     if (this.props.defaultValue !== undefined && this.props.defaultValue.length > 0 && !this.props.read_only) {
-      this.canvasRef.fromDataURL(this.props.defaultValue);
+      this.canvasRef.fromDataURL('data:image/' + this.props.defaultValue);
     }
 
     const clearBtn = document.querySelector('.m-signature-pad--footer button');
@@ -431,7 +431,7 @@ class Signature extends React.Component {
     if (this.canvasRef.isEmpty()) {
       this.setState({ value: '' });
     } else {
-      const value = this.canvasRef.toDataURL();
+      const value = this.canvasRef.toDataURL().replace('data:image/', '');
       this.setState({ value });
     }
   }
@@ -457,7 +457,7 @@ class Signature extends React.Component {
 
     let sourceDataURL = false;
     if (this.props.read_only === true && this.props.defaultValue && this.props.defaultValue.length > 0) {
-      sourceDataURL = this.props.defaultValue;
+      sourceDataURL = `data:image/${this.props.defaultValue}`;
     }
 
     return (
@@ -818,7 +818,7 @@ class Camera extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { value: props.defaultValue || '' };
+    this.state = { value: props.defaultValue ? `data:image/${props.defaultValue}` : '' };
 
     this.clearImage = this.clearImage.bind(this);
     this.displayImage = this.displayImage.bind(this);
@@ -837,7 +837,7 @@ class Camera extends React.Component {
 
       reader.onloadend = function() {
         self.setState({
-          value: reader.result,
+          value: reader.result.replace('data:image/', ''),
         });
       };
     }
@@ -890,7 +890,7 @@ class Camera extends React.Component {
             <div>
               <input type="file" accept="image/*" capture="camera" className="image-upload" onChange={this.displayImage} />
               <div className="image-upload-control">
-                <div className="btn btn-default btn-school"><i className="fa fa-camera"></i> Upload Photo</div>
+                <div className="btn btn-default btn-school"><i className="fa fa-camera" /> Upload Photo</div>
                 <p>Select an image from your computer or device.</p>
               </div>
             </div>
@@ -902,10 +902,10 @@ class Camera extends React.Component {
 
             {this.state.value &&
             <div>
-              <img src={this.state.value} height="100" className="image-upload-preview" onClick={this.openInNewWindow} /><br />
+              <img src={`data:image/${this.state.value}`} height="100" className="image-upload-preview" onClick={this.openInNewWindow} /><br />
               {!this.props.read_only &&
               <div className="btn btn-school btn-image-clear" onClick={this.clearImage}>
-                <i className="fa fa-times"></i> Clear Photo
+                <i className="fa fa-times" /> Clear Photo
               </div>
               }
             </div>

@@ -15,12 +15,8 @@ export default class FormGenerator extends React.Component {
     this.getFormData = this.getFormData.bind(this);
   }
 
-  _checkboxesDefaultValue(item) {
-    const defaultChecked = [];
-    item.options.forEach(option => {
-      defaultChecked.push(this.props.answer_data[`option_${option.key}`]);
-    });
-    return defaultChecked;
+  _checkboxesDefaultValue(item, answer_data = this.props.answer_data) {
+    return item.options.map(x => answer_data[`option_${x.key}`]).filter(x => x);
   }
 
   _isIncorrect(item, answer_data) {
@@ -64,9 +60,14 @@ export default class FormGenerator extends React.Component {
 
   _isInvalid(item, answer_data) {
     if (item.required === true) {
-      return answer_data[item.field_name] === undefined ||
-        answer_data[item.field_name] === '' ||
-        answer_data[item.field_name] === null;
+      let value;
+      if (item.element === 'Checkboxes') {
+        value = this._checkboxesDefaultValue(item, answer_data).join(',');
+      } else {
+        value = answer_data[item.field_name];
+      }
+
+      return value === undefined || value === '' || value === null;
     } else {
       return false;
     }
