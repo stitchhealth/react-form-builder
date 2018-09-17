@@ -1101,6 +1101,7 @@
 
 .rdw-editor-main {
   height: auto;
+  min-height: 150px;
   width: 100%;
   overflow: auto;
   box-sizing: content-box;
@@ -1134,10 +1135,6 @@
 
 .rdw-editor-wrapper:focus {
   outline: none;
-}
-
-.DraftEditor-root {
-  padding: 0 10px;
 }
 
 /**
