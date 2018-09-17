@@ -7,6 +7,7 @@
     padding: 10px;
     box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
     min-height: 680px;
+    word-wrap: break-word;
 
     .preview-page-break {
       padding: 5px 0;
@@ -198,6 +199,11 @@
             opacity: 1;
           }
         }
+
+        p,
+        p > div {
+          margin-bottom: 20px;
+        }
       }
     }
     &.is-editing {
@@ -385,4 +391,9 @@
 .edit-modal {
   display: block;
   overflow-y: scroll;
+}
+
+.public-DraftEditor-content {
+  max-height: 65vh;
+  overflow-y: auto;
 }

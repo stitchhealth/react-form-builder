@@ -1100,7 +1100,7 @@
 }
 
 .rdw-editor-main {
-  height: 150px;
+  height: auto;
   width: 100%;
   overflow: auto;
   box-sizing: content-box;
@@ -1157,6 +1157,11 @@
 
 .public-DraftEditor-content[contenteditable=true] {
   -webkit-user-modify: read-write-plaintext-only
+}
+
+.public-DraftEditor-content {
+  max-height: 65vh;
+  overflow-y: auto;
 }
 
 .DraftEditor-root {
