@@ -63,6 +63,12 @@ export default class FormGenerator extends React.Component {
       let value;
       if (item.element === 'Checkboxes') {
         value = this._checkboxesDefaultValue(item, answer_data).join(',');
+      } else if (item.element === 'Signature') {
+        try {
+          value = JSON.parse(answer_data[item.field_name])['value'];
+        } catch (e) {
+          //
+        }
       } else {
         value = answer_data[item.field_name];
       }

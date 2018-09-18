@@ -1,7 +1,6 @@
 import React from 'react';
 import HeaderBar from './header-bar';
 import Select from 'react-select';
-import SignaturePad from 'react-signature-pad';
 import { sortable } from 'react-anything-sortable';
 import ReactBootstrapSlider from 'react-bootstrap-slider';
 import ReactDatePicker from 'react-datepicker';
@@ -9,6 +8,7 @@ import StarRating from './star-rating';
 import myxss from './filter-xss';
 import moment from 'moment';
 import cx from 'classnames';
+import SignaturePad from 'react-signature-pad';
 
 class RfbItem extends React.Component {
   render() {
@@ -399,19 +399,10 @@ class DatePicker extends React.Component {
   }
 }
 
-@sortable
-class Signature extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { value: this.props.mutable ? this.props.defaultValue : '' };
-    this._setDataUrl = this._setDataUrl.bind(this);
-    this._clearDataUrl = this._clearDataUrl.bind(this);
-  }
-
+class DrawSignature extends React.Component {
   componentDidMount() {
-    if (this.props.defaultValue !== undefined && this.props.defaultValue.length > 0 && !this.props.read_only) {
-      this.canvasRef.fromDataURL('data:image/' + this.props.defaultValue);
+    if (this.props.value !== undefined && this.props.value.length > 0) {
+      this.canvasRef.fromDataURL('data:image/' + this.props.value);
     }
 
     const clearBtn = document.querySelector('.m-signature-pad--footer button');
@@ -423,18 +414,101 @@ class Signature extends React.Component {
     clearBtn && clearBtn.removeEventListener('click', this._clearDataUrl);
   }
 
-  _clearDataUrl() {
-    this.setState({ value: '' });
-  }
+  _clearDataUrl = () => {
+    this.props.onChange({ value: '' });
+  };
 
-  _setDataUrl() {
+  _setDataUrl = () => {
     if (this.canvasRef.isEmpty()) {
-      this.setState({ value: '' });
+      this.props.onChange({ value: '' });
     } else {
       const value = this.canvasRef.toDataURL().replace('data:image/', '');
-      this.setState({ value });
+      this.props.onChange({ value });
     }
+  };
+
+  render() {
+    const props = {};
+    props.clearButton = true;
+    if (this.props.mutable) {
+      props.defaultValue = this.props.defaultValue;
+    }
+
+    return <SignaturePad {...props} ref={(ref) => this.canvasRef = ref} onEnd={this._setDataUrl} />;
   }
+}
+
+class TypeSignature extends React.Component {
+  componentDidMount() {
+    this.canvasCtx = this.canvasRef.getContext('2d');
+    this.canvasCtx.font = 'normal 1.875em/50px "Journal",\'Comic Sans MS\',Georgia,Times,serif';
+    this.canvasCtx.fillText(this.props.inputText || '', 10, 50);
+  }
+
+  onChange = (e) => {
+    const inputText = e.target.value || '';
+    const { width, height } = this.canvasRef;
+    this.canvasCtx.clearRect(0, 0, width, height);
+    this.canvasCtx.fillText(inputText, 10, 50);
+    const value = inputText ? this.canvasRef.toDataURL().replace('data:image/', '') : '';
+
+    this.props.onChange({ inputText, value });
+  };
+
+  render() {
+    return (
+      <div className='form-group'>
+        <label>Type your name</label>
+        <input type='text' className='form-control' onChange={this.onChange} value={this.props.inputText} />
+
+        <div className='type-signature-body'>
+          <canvas ref={(ref) => this.canvasRef = ref} width="530" height="100" />
+        </div>
+      </div>
+    );
+  }
+}
+
+@sortable
+class Signature extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const initalState = {
+      value: '',
+      inputText: '',
+      inputType: 'draw',
+    };
+
+    if (this.props.defaultValue) {
+      try {
+        this.state = JSON.parse(this.props.defaultValue);
+      } catch (e) {
+        // Backward compatible for already available Singature version
+        if (typeof this.props.defaultValue === 'string' && this.props.defaultValue.indexOf(';base64,') > -1) {
+          initalState.value = this.props.defaultValue;
+        }
+        this.state = initalState;
+      }
+    } else {
+      this.state = initalState;
+    }
+
+    this.originalValue = { draw: '', type: '' };
+    this.originalValue[this.state.inputType] = this.state.value;
+  }
+
+  onChange = (state) => {
+    this.setState(state);
+  };
+
+  onToggleInputType = (e) => {
+    this.originalValue[this.state.inputType] = this.state.value;
+    const inputType = e.target.value;
+    const value = this.originalValue[inputType];
+
+    this.onChange({ inputType, value });
+  };
 
   handleChange(e) {
     const { handleChange } = this.props;
@@ -444,20 +518,31 @@ class Signature extends React.Component {
   }
 
   render() {
-    let props = {};
-    props.type = 'hidden';
-    props.value = this.state.value || '';
-    props.name = this.props.data.field_name;
+    const props = {
+      onChange: this.onChange,
+      value: this.state.value,
+      inputText: this.state.inputText,
+    };
 
-    let pad_props = {};
-    pad_props.clearButton = true;
-    if (this.props.mutable) {
-      pad_props.defaultValue = this.props.defaultValue;
-    }
+    const input_type_props = {
+      type: 'radio',
+      onChange: this.onToggleInputType,
+      name: 'input_type_' + this.props.data.field_name,
+    };
+
+    const hidden_props = {
+      type: 'hidden',
+      name: this.props.data.field_name,
+      value: JSON.stringify({
+        value: this.state.value || '',
+        inputText: this.state.inputText,
+        inputType: this.state.inputType,
+      }),
+    };
 
     let sourceDataURL = false;
-    if (this.props.read_only === true && this.props.defaultValue && this.props.defaultValue.length > 0) {
-      sourceDataURL = `data:image/${this.props.defaultValue}`;
+    if (this.props.read_only === true && this.state.value && this.state.value.length > 0) {
+      sourceDataURL = `data:image/${this.state.value}`;
     }
 
     return (
@@ -483,10 +568,33 @@ class Signature extends React.Component {
             <span className="label-required label label-danger">Required</span>
             }
           </label>
-          {this.props.read_only === true && sourceDataURL && <div><img src={sourceDataURL} className="responsive-signature" /></div>}
-          {this.props.read_only === true && !sourceDataURL && <div className="no-signature">No Signature</div>}
-          {!this.props.read_only && (<SignaturePad {...pad_props} ref={(ref) => this.canvasRef = ref} onEnd={this._setDataUrl} />)}
-          {!this.props.read_only && (<input {...props} />)}
+
+          {!this.props.read_only &&
+          <div>
+            <div className="bs-callout bs-callout-warning">
+              <p>I agree that the signature and initials will be the electronic representation of my signature and initial for all purposes when I (or my agent) use them on documents, including legally binding contracts - just the same as pen-and-paper signing or initial.</p>
+            </div>
+
+            <div className='form-group'>
+              <label className='radio-label option-inline'>
+                <input value='draw' defaultChecked={this.state.inputType !== 'type'} {...input_type_props} /> Draw
+              </label>
+              <label className='radio-label option-inline'>
+                <input value='type' defaultChecked={this.state.inputType === 'type'} {...input_type_props} /> Type
+              </label>
+            </div>
+
+            {this.state.inputType === 'type' ?
+              <TypeSignature {...props} /> :
+              <DrawSignature {...props} />
+            }
+
+            <input {...hidden_props} />
+          </div>
+          }
+
+          {this.props.read_only && sourceDataURL && <div><img src={sourceDataURL} className="responsive-signature" /></div>}
+          {this.props.read_only && !sourceDataURL && <div className="no-signature">No Signature</div>}
         </div>
       </RfbItem>
     );
