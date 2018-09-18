@@ -9,6 +9,7 @@ import myxss from './filter-xss';
 import moment from 'moment';
 import cx from 'classnames';
 import SignaturePad from 'react-signature-pad';
+import md5 from 'md5';
 
 class RfbItem extends React.Component {
   render() {
@@ -469,6 +470,65 @@ class TypeSignature extends React.Component {
   }
 }
 
+class SignatureCert extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { certModalOpened: false };
+  }
+
+  openCert = () => {
+    this.setState({ certModalOpened: true });
+  };
+
+  closeCert = () => {
+    this.setState({ certModalOpened: false });
+  };
+
+  render() {
+    const { signer_name, signer_email, signed_at, signer_ip, value, reference } = this.props;
+    const signedAt = moment(signed_at).format('LLL');
+    const signerIp = signer_ip.split('.').splice(3, 1, '***').join('.');
+    const sourceDataURL = `data:image/${value}`;
+    const fingerprint = md5(value);
+
+    return (
+      <div>
+        <i>
+          e-signed by {signer_name} on {signedAt} from IP {signerIp}
+          - <a onClick={this.openCert}>Certificate</a>
+        </i>
+
+        {this.state.certModalOpened && <div role="dialog">
+          <div className="fade modal-backdrop in" />
+          <div role="dialog" tabIndex="-1" className="fade invite-people-modal in modal edit-modal">
+            <div className="modal-dialog">
+              <div className="modal-content" role="document">
+                <div className="modal-header">
+                  <h4 className="modal-title pull-left">Signature Certificate</h4>
+                  <a role="link" onClick={this.closeCert}><i className="pull-right fa fa-times dismiss-edit" /></a>
+                </div>
+                <div className="modal-body edit-form">
+                  <div>
+                    <div><b>{signer_name}</b></div>
+                    <div>IP: {signer_ip}</div>
+                    <div>Email: {signer_email} <span className="label label-primary" style={{ lineHeight: '21px' }}>Verified</span></div>
+                    <div>Captured: {signedAt}</div>
+                    <div>Reference: {reference}</div>
+                    <br />
+                  </div>
+                  <img src={sourceDataURL} className="responsive-signature" />
+                  Fingerprint Checksum: {fingerprint}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>}
+      </div>
+    );
+  }
+}
+
 @sortable
 class Signature extends React.Component {
   constructor(props) {
@@ -478,6 +538,12 @@ class Signature extends React.Component {
       value: '',
       inputText: '',
       inputType: 'draw',
+      reference: '',
+      signature: '',
+      signer_ip: '',
+      signed_at: '',
+      signer_name: '',
+      signer_email: '',
     };
 
     if (this.props.defaultValue) {
@@ -540,6 +606,16 @@ class Signature extends React.Component {
       }),
     };
 
+    const certificate_props = {
+      value: this.state.value,
+      reference: this.state.reference,
+      signature: this.state.signature,
+      signer_ip: this.state.signer_ip,
+      signed_at: this.state.signed_at,
+      signer_name: this.state.signer_name,
+      signer_email: this.state.signer_email,
+    };
+
     let sourceDataURL = false;
     if (this.props.read_only === true && this.state.value && this.state.value.length > 0) {
       sourceDataURL = `data:image/${this.state.value}`;
@@ -584,16 +660,16 @@ class Signature extends React.Component {
               </label>
             </div>
 
-            {this.state.inputType === 'type' ?
-              <TypeSignature {...props} /> :
-              <DrawSignature {...props} />
-            }
-
+            {this.state.inputType === 'type' ? <TypeSignature {...props} /> : <DrawSignature {...props} />}
             <input {...hidden_props} />
           </div>
           }
 
-          {this.props.read_only && sourceDataURL && <div><img src={sourceDataURL} className="responsive-signature" /></div>}
+          {this.props.read_only && sourceDataURL && <div>
+            <img src={sourceDataURL} className="responsive-signature" />
+            {this.state.signature && <SignatureCert {...certificate_props} />}
+          </div>}
+
           {this.props.read_only && !sourceDataURL && <div className="no-signature">No Signature</div>}
         </div>
       </RfbItem>
