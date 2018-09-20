@@ -168,7 +168,7 @@ export default class FormGenerator extends React.Component {
 
     return (
       <div className="rfbw">
-        <form ref='form'>
+        <form ref='form' onSubmit={(e) => e.preventDefault()}>
           <FormValidator emitter={this.emitter} />
           <div className='rfbg'>{items}</div>
         </form>

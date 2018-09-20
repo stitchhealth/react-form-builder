@@ -402,20 +402,26 @@ class DatePicker extends React.Component {
 
 class DrawSignature extends React.Component {
   componentDidMount() {
-    if (this.props.value !== undefined && this.props.value.length > 0) {
-      this.canvasRef.fromDataURL('data:image/' + this.props.value);
-    }
-
     const clearBtn = document.querySelector('.m-signature-pad--footer button');
     clearBtn && clearBtn.addEventListener('click', this._clearDataUrl);
+    window.addEventListener('resize', this._drawToCanvas);
+    clearBtn.setAttribute('type', 'button');
+    this._drawToCanvas();
   }
 
   componentWillUnmount() {
     const clearBtn = document.querySelector('.m-signature-pad--footer button');
     clearBtn && clearBtn.removeEventListener('click', this._clearDataUrl);
+    window.removeEventListener('resize', this._drawToCanvas);
   }
 
-  _clearDataUrl = () => {
+  _drawToCanvas = () => {
+    if (this.props.value !== undefined && this.props.value.length > 0) {
+      this.canvasRef.fromDataURL('data:image/' + this.props.value);
+    }
+  };
+
+  _clearDataUrl = (e) => {
     this.props.onChange({ value: '' });
   };
 
@@ -1034,9 +1040,9 @@ class Camera extends React.Component {
   }
 
   openInNewWindow() {
-    const win = window.open();
-    const style = 'border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;';
-    win.document.write(`<iframe src="${this.state.value}" frameborder="0" style="${style}" allowfullscreen></iframe>`);
+    const win = window.open('about:blank');
+    const img = `<img src='data:image/${this.state.value}' />`;
+    setTimeout(() => win.document.write(img), 100);
   }
 
   render() {
