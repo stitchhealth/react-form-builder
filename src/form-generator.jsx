@@ -156,7 +156,7 @@ export default class FormGenerator extends React.Component {
         case 'Image':
           return <Image ref={item.field_name} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Annotation':
-          return <Annotation ref={item.field_name} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <Annotation ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Signature':
           return <Signature ref={item.field_name} read_only={this.props.read_only || item.readOnly} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'HyperLink':

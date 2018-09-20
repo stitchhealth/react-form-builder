@@ -61,6 +61,28 @@ export default class FormElementsEdit extends React.Component {
     }
   }
 
+  uploadImage = (e) => {
+    const self = this;
+    const target = e.target;
+    let file, reader;
+
+    if (target.files && target.files.length) {
+      file = target.files[0];
+      reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onloadend = function() {
+        let this_element = self.state.element;
+        this_element.src = reader.result.replace('data:image/', '');
+
+        self.setState({
+          element: this_element,
+          dirty: true,
+        }, () => self.updateElement());
+      };
+    }
+  };
+
   render() {
     let this_checked = this.props.element.hasOwnProperty('required') ? this.props.element.required : false;
     let this_read_only = this.props.element.hasOwnProperty('readOnly') ? this.props.element.readOnly : false;
@@ -120,32 +142,6 @@ export default class FormElementsEdit extends React.Component {
           <TextAreaAutosize type="text" className="form-control" defaultValue={this.props.element.href} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'href', 'value')} />
         </div>
         }
-        {this.props.element.hasOwnProperty('src') &&
-        <div>
-          <div className="form-group">
-            <label className="control-label" htmlFor="srcInput">Link to:</label>
-            <input id="srcInput" type="text" className="form-control" defaultValue={this.props.element.src} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'src', 'value')} />
-          </div>
-          <div className="form-group">
-            <div className="checkbox">
-              <label>
-                <input type="checkbox" checked={this_checked_center} value={true} onChange={this.editElementProp.bind(this, 'center', 'checked')} />
-                Center?
-              </label>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-sm-3">
-              <label className="control-label" htmlFor="elementWidth">Width:</label>
-              <input id="elementWidth" type="text" className="form-control" defaultValue={this.props.element.width} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'width', 'value')} />
-            </div>
-            <div className="col-sm-3">
-              <label className="control-label" htmlFor="elementHeight">Height:</label>
-              <input id="elementHeight" type="text" className="form-control" defaultValue={this.props.element.height} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'height', 'value')} />
-            </div>
-          </div>
-        </div>
-        }
         {this.props.element.hasOwnProperty('label') &&
         <div className="form-group">
           <label>Display Label</label>
@@ -196,7 +192,65 @@ export default class FormElementsEdit extends React.Component {
           }
         </div>
         }
-
+        {this.props.element.hasOwnProperty('src') &&
+        <div>
+          {this.state.element.element === 'Annotation' ?
+            <div>
+              <label>Browse Background Image</label>
+              <br />
+              {this.props.element.src &&
+              <div className="responsive-signature"
+                   style={{ width: '100%', textAlign: this_checked_center ? 'center' : 'left' }}>
+                <img
+                  style={{ maxWidth: '100%' }}
+                  width={this.props.element.width}
+                  height={this.props.element.height}
+                  src={`data:image/${this.props.element.src}`} />
+                <br />
+              </div>
+              }
+              {this.props.element.src ?
+                <div
+                  className="btn btn-school btn-image-clear"
+                  onClick={this.editElementProp.bind(this, 'src', 'value')}
+                  style={{ margin: '0', padding: '0', marginBottom: '15px' }}
+                >
+                  <i className="fa fa-times" /> Clear Photo
+                </div> :
+                <div className='image-upload-container'>
+                  <input type="file" accept="image/*" className="image-upload" onChange={this.uploadImage} />
+                  <div className="image-upload-control">
+                    <div className="btn btn-default btn-school"><i className="fa fa-camera" /> Upload Photo</div>
+                  </div>
+                </div>
+              }
+              <br />
+            </div> :
+            <div className="form-group">
+              <label className="control-label" htmlFor="srcInput">Link to:</label>
+              <input id="srcInput" type="text" className="form-control" defaultValue={this.props.element.src} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'src', 'value')} />
+            </div>
+          }
+          <div className="form-group">
+            <div className="checkbox">
+              <label>
+                <input type="checkbox" checked={this_checked_center} value={true} onChange={this.editElementProp.bind(this, 'center', 'checked')} />
+                Center?
+              </label>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-sm-3">
+              <label className="control-label" htmlFor="elementWidth">Width:</label>
+              <input id="elementWidth" type="text" className="form-control" defaultValue={this.props.element.width} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'width', 'value')} />
+            </div>
+            <div className="col-sm-3">
+              <label className="control-label" htmlFor="elementHeight">Height:</label>
+              <input id="elementHeight" type="text" className="form-control" defaultValue={this.props.element.height} onBlur={this.updateElement.bind(this)} onChange={this.editElementProp.bind(this, 'height', 'value')} />
+            </div>
+          </div>
+        </div>
+        }
         {this.state.element.element === 'Signature' && this.props.element.readOnly
           ? (
             <div className="form-group">

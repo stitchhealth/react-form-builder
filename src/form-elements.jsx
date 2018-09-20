@@ -11,6 +11,7 @@ import cx from 'classnames';
 import SignaturePad from 'react-signature-pad';
 import md5 from 'md5';
 import ElementActions from './actions/ElementActions';
+import uuid from 'uuid/v4';
 
 class RfbItem extends React.Component {
   _onDestroy(item) {
@@ -377,16 +378,17 @@ class DatePicker extends React.Component {
 
 class DrawSignature extends React.Component {
   componentDidMount() {
-    const clearBtn = document.querySelector('.m-signature-pad--footer button');
-    clearBtn && clearBtn.addEventListener('click', this._clearDataUrl);
+    const $clear = $(this.canvasRef.refs.cv.parentElement.nextElementSibling.childNodes[0]);
+    $clear && $clear.on('click', this._clearDataUrl);
+    $clear.attr('type', 'button');
+
     window.addEventListener('resize', this._drawToCanvas);
-    clearBtn.setAttribute('type', 'button');
     this._drawToCanvas();
   }
 
   componentWillUnmount() {
-    const clearBtn = document.querySelector('.m-signature-pad--footer button');
-    clearBtn && clearBtn.removeEventListener('click', this._clearDataUrl);
+    const $clear = $(this.canvasRef.refs.cv.parentElement.nextElementSibling.childNodes[0]);
+    $clear && $clear.on('click', this._clearDataUrl);
     window.removeEventListener('resize', this._drawToCanvas);
   }
 
@@ -839,7 +841,145 @@ class Image extends React.Component {
 
 @sortable
 class Annotation extends React.Component {
+  colors = {
+    '0': '#0000FF',
+    '1': '#FF0000',
+    '2': '#008000',
+    '3': '#800080',
+    '4': '#F8D500',
+    '5': '#000000',
+  };
+
+  centerAlign = {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    bottom: '0',
+    right: '0',
+    margin: 'auto',
+  };
+
+  leftAlign = {
+    position: 'static',
+    margin: 'auto',
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = { value: this.props.defaultValue || this.props.data.src || '' };
+  }
+
+  onChangePenColor = (e) => {
+    this.canvasRef.penColor = this.colors[e.target.value];
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.mutable) {
+      this.setState({ value: nextProps.data.src || '' }, this._drawToCanvas);
+    }
+  }
+
+  componentDidMount() {
+    if (!this.props.read_only) {
+      const $clear = $(this.canvasRef.refs.cv.parentElement.nextElementSibling.childNodes[0]);
+      $clear && $clear.on('click', this._clearDataUrl);
+      $clear.attr('type', 'button');
+
+      window.addEventListener('resize', this._drawToCanvas);
+      this._drawToCanvas();
+    }
+  }
+
+  componentWillUnmount() {
+    if (!this.props.read_only) {
+      const $clear = $(this.canvasRef.refs.cv.parentElement.nextElementSibling.childNodes[0]);
+      $clear && $clear.off('click', this._clearDataUrl);
+      window.removeEventListener('resize', this._drawToCanvas);
+    }
+  }
+
+  _getImageDimenssions = (maxWidth, callback) => {
+    const divId = `hiddenImage_${uuid()}`;
+    const html = `
+    <div id='${divId}' className="responsive-signature" style="width: 100%;">
+      <img
+        style="max-width: ${maxWidth}px;"
+        width="${this.props.data.width || ''}"
+        height="${this.props.data.height || ''}"
+        src="data:image/${this.state.value}" />
+      <br />
+    </div>`;
+
+    $('body').append(html);
+    const $div = $(`#${divId}`);
+    const $img = $div.find('img');
+
+    $img.one('load', () => {
+      callback($img[0].clientWidth, $img[0].clientHeight);
+      $div.remove();
+    });
+  };
+
+  _drawToCanvas = () => {
+    const self = this;
+    const $canvas = $(this.canvasRef.refs.cv);
+    const $body = $(this.canvasRef.refs.cv.parentElement);
+
+    if (this.state.value && this.state.value.length > 0) {
+      this._getImageDimenssions($body.width(), (width, height) => {
+        $body.height(height);
+        $canvas.width(width);
+        $canvas.height(height);
+        $canvas.css(self.props.data.center ? self.centerAlign : self.leftAlign);
+
+        self.canvasRef._resizeCanvas();
+        self.canvasRef.fromDataURL('data:image/' + self.state.value);
+      });
+    } else {
+      const { height } = this.props.data;
+
+      $body.height(height || 200);
+      $canvas.width($body.width());
+      $canvas.height(height || 200);
+      $canvas.css(this.props.data.center ? this.centerAlign : this.leftAlign);
+
+      this.canvasRef._resizeCanvas();
+    }
+  };
+
+  _clearDataUrl = (e) => {
+    this.setState({ value: this.props.data.src || '' }, this._drawToCanvas);
+  };
+
+  _setDataUrl = () => {
+    const value = this.canvasRef.toDataURL().replace('data:image/', '');
+    this.setState({ value });
+  };
+
   render() {
+    const props = {
+      clearButton: true,
+      penColor: this.colors[0],
+    };
+
+    const pen_color_props = {
+      type: 'radio',
+      onChange: this.onChangePenColor,
+      name: 'pen_color_' + this.props.data.field_name,
+    };
+
+    const hidden_props = {
+      type: 'hidden',
+      value: this.state.value || '',
+      name: this.props.data.field_name,
+    };
+
+    let sourceDataURL = false;
+    if (this.props.read_only === true && this.state.value && this.state.value.length > '0') {
+      sourceDataURL = `data:image/${this.state.value}`;
+    }
+
     return (
       <RfbItem
         data={this.props.data}
@@ -850,11 +990,46 @@ class Annotation extends React.Component {
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
       >
-        <RfbLabel
-          label={this.props.data.label}
-          required={this.props.data.required}
-          read_only={this.props.read_only} />
-        Test
+        <div className="form-group">
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
+
+          {!this.props.read_only &&
+          <div>
+            <div className='form-group'>
+              <label className='radio-label option-inline' style={{ color: this.colors[0] }}>
+                <input value='0' defaultChecked {...pen_color_props} /> Blue
+              </label>
+              <label className='radio-label option-inline' style={{ color: this.colors[1] }}>
+                <input value='1' {...pen_color_props} /> Red
+              </label>
+              <label className='radio-label option-inline' style={{ color: this.colors[2] }}>
+                <input value='2' {...pen_color_props} /> Green
+              </label>
+              <label className='radio-label option-inline' style={{ color: this.colors[3] }}>
+                <input value='3' {...pen_color_props} /> Purple
+              </label>
+              <label className='radio-label option-inline' style={{ color: this.colors[4] }}>
+                <input value='4' {...pen_color_props} /> Yellow
+              </label>
+              <label className='radio-label option-inline' style={{ color: this.colors[5] }}>
+                <input value='5' {...pen_color_props} /> Black
+              </label>
+            </div>
+
+            <SignaturePad {...props} ref={(ref) => this.canvasRef = ref} onEnd={this._setDataUrl} />
+            <input {...hidden_props} />
+          </div>
+          }
+
+          {this.props.read_only && sourceDataURL && <div>
+            <img src={sourceDataURL} className="responsive-signature" />
+          </div>}
+
+          {this.props.read_only && !sourceDataURL && <div className="no-signature">No Image</div>}
+        </div>
       </RfbItem>
     );
   }

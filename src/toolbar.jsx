@@ -137,6 +137,7 @@ export default class Toolbar extends React.Component {
         label: '',
         icon: 'fa fa-paint-brush',
         field_name: 'annotation_',
+        src: '',
       },
       // {
       //   key: 'Rating',
@@ -232,7 +233,7 @@ export default class Toolbar extends React.Component {
     if (item.href)
       elementOptions['href'] = item.href;
 
-    if (item.key === 'Image') {
+    if (item.key === 'Image' || item.key === 'Annotation') {
       elementOptions['src'] = item.src;
     }
 
