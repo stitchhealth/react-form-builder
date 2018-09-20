@@ -131,6 +131,13 @@ export default class Toolbar extends React.Component {
         field_name: 'image_',
         src: '',
       },
+      {
+        key: 'Annotation',
+        name: 'Annotations',
+        label: '',
+        icon: 'fa fa-paint-brush',
+        field_name: 'annotation_',
+      },
       // {
       //   key: 'Rating',
       //   canHaveAnswer: true,

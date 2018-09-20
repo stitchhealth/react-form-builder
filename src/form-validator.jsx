@@ -23,10 +23,10 @@ export default class FormValidator extends React.Component {
     this.subscription.remove();
   }
 
-  dismissModal(e) {
+  dismissModal = (e) => {
     e.preventDefault();
     this.setState({ errors: [] });
-  }
+  };
 
   render() {
     let errors = this.state.errors.map((error, index) => {
@@ -44,7 +44,7 @@ export default class FormValidator extends React.Component {
             </ul>
           </div>
           <div className="clearfix">
-            <a className="pull-right btn btn-sm btn-danger" onClick={this.dismissModal.bind(this)}>Dismiss</a>
+            <a className="pull-right btn btn-sm btn-danger" onClick={this.dismissModal}>Dismiss</a>
           </div>
         </div>
         }

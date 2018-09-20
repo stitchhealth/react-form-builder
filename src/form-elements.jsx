@@ -10,16 +10,39 @@ import moment from 'moment';
 import cx from 'classnames';
 import SignaturePad from 'react-signature-pad';
 import md5 from 'md5';
+import ElementActions from './actions/ElementActions';
 
 class RfbItem extends React.Component {
+  _onDestroy(item) {
+    ElementActions.deleteElement(item);
+  }
+
   render() {
+    const {
+      data = {},
+      children = '',
+      className = '',
+      mutable = true,
+      editModeOn = () => null,
+      ...props
+    } = this.props;
+
     const invalidClases = ['', 'true', 'false', 'undefined'];
-    const { children = '', pageBreakBefore = false, className = '', ...props } = this.props;
     const classes = className.split(' ').map(x => x.trim()).filter(x => !invalidClases.includes(x));
-    pageBreakBefore && classes.push('alwaysbreak');
+    data.pageBreakBefore && classes.push('alwaysbreak');
     classes.push('rfb-item');
 
-    return <div {...props} className={classes.join(' ')}>{children}</div>;
+    return (
+      <div {...props} className={classes.join(' ')}>
+        {!mutable &&
+        <div>
+          {data.pageBreakBefore && <div className="preview-page-break">Page Break</div>}
+          <HeaderBar editModeOn={editModeOn} data={data} onDestroy={this._onDestroy} static={data.static} required={data.required} />
+        </div>
+        }
+        {children}
+      </div>
+    );
   }
 }
 
@@ -30,20 +53,14 @@ class Header extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <h3 className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
     );
@@ -57,20 +74,14 @@ class Paragraph extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <p className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
     );
@@ -84,20 +95,14 @@ class Label extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <label className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
     );
@@ -109,20 +114,14 @@ class LineBreak extends React.Component {
   render() {
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <hr />
       </RfbItem>
     );
@@ -148,20 +147,14 @@ class TextInput extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -196,20 +189,14 @@ class NumberInput extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -243,20 +230,14 @@ class TextArea extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -276,7 +257,6 @@ class DatePicker extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getInitialState();
-    this.handleChange = this.handleChange.bind(this);
   }
 
   getInitialState() {
@@ -301,7 +281,7 @@ class DatePicker extends React.Component {
     };
   }
 
-  handleChange(dt) {
+  handleChange = (dt) => {
     if (dt && dt.target) {
       var placeholder = (dt && dt.target && dt.target.value === '') ? 'mm/dd/yyyy' : '';
       var formattedDate = (dt.target.value) ? moment(dt.target.value).format('YYYY-MM-DD') : '';
@@ -319,7 +299,7 @@ class DatePicker extends React.Component {
         placeholder: placeholder,
       });
     }
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (this.props.data.defaultToday && !this.state.defaultToday) {
@@ -340,8 +320,6 @@ class DatePicker extends React.Component {
     props.disabled = this.props.read_only;
     props.name = this.props.data.field_name;
 
-    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
     if (this.props.mutable) {
       props.defaultValue = this.props.defaultValue;
       props.ref = 'child_ref_' + this.props.data.field_name;
@@ -349,20 +327,14 @@ class DatePicker extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -582,13 +554,6 @@ class Signature extends React.Component {
     this.onChange({ inputType, value });
   };
 
-  handleChange(e) {
-    const { handleChange } = this.props;
-    if (typeof handleChange === 'function') {
-      handleChange(e);
-    }
-  }
-
   render() {
     const props = {
       onChange: this.onChange,
@@ -629,20 +594,14 @@ class Signature extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -696,12 +655,11 @@ class Dropdown extends React.Component {
     }
 
     this.state = { value };
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     this.setState({ value: e });
-  }
+  };
 
   render() {
     let hidden_props = {};
@@ -739,20 +697,14 @@ class Dropdown extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -776,20 +728,14 @@ class Checkboxes extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label className="form-label">
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -829,20 +775,14 @@ class RadioButtons extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label className="form-label">
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -885,22 +825,37 @@ class Image extends React.Component {
 
     return (
       <RfbItem
-        style={style}
+        data={this.props.data}
+        style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
+        {this.props.data.src ?
+          <img src={this.props.data.src} width={this.props.data.width} height={this.props.data.height} style={{ maxWidth: '100%' }} /> :
+          <div className="no-image">No Image</div>
+        }
+      </RfbItem>
+    );
+  }
+}
 
-        {!this.props.mutable &&
-        <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} required={this.props.data.required} />
-        }
-        {this.props.data.src &&
-        <img src={this.props.data.src} width={this.props.data.width} height={this.props.data.height} style={{ maxWidth: '100%' }} />
-        }
-        {!this.props.data.src &&
-        <div className="no-image">No Image</div>
-        }
+@sortable
+class Annotation extends React.Component {
+  render() {
+    return (
+      <RfbItem
+        data={this.props.data}
+        style={this.props.style}
+        mutable={this.props.mutable}
+        className={this.props.className}
+        editModeOn={this.props.editModeOn}
+        onMouseDown={this.props.onMouseDown}
+        onTouchStart={this.props.onTouchStart}
+      >
+        Test
       </RfbItem>
     );
   }
@@ -921,20 +876,14 @@ class Rating extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -954,20 +903,14 @@ class HyperLink extends React.Component {
   render() {
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <a target="_blank" href={this.props.data.href} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
         </div>
@@ -981,20 +924,14 @@ class Download extends React.Component {
   render() {
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <a href={this.props.download_path + '?id=' + this.props.data.file_path} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
         </div>
@@ -1009,13 +946,9 @@ class Camera extends React.Component {
     super(props);
 
     this.state = { value: props.defaultValue ? `data:image/${props.defaultValue}` : '' };
-
-    this.clearImage = this.clearImage.bind(this);
-    this.displayImage = this.displayImage.bind(this);
-    this.openInNewWindow = this.openInNewWindow.bind(this);
   }
 
-  displayImage(e) {
+  displayImage = (e) => {
     var self = this;
     var target = e.target;
     var file, reader;
@@ -1031,19 +964,19 @@ class Camera extends React.Component {
         });
       };
     }
-  }
+  };
 
-  clearImage() {
+  clearImage = () => {
     this.setState({
       value: '',
     });
-  }
+  };
 
-  openInNewWindow() {
+  openInNewWindow = () => {
     const win = window.open('about:blank');
     const img = `<img src='data:image/${this.state.value}' />`;
     setTimeout(() => win.document.write(img), 100);
-  }
+  };
 
   render() {
     let hidden_props = {};
@@ -1053,20 +986,14 @@ class Camera extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -1115,7 +1042,6 @@ class Range extends React.Component {
     super(props);
 
     this.state = { value: this.getDefaultValue(props) };
-    this.onChangeValue = this.onChangeValue.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -1126,9 +1052,9 @@ class Range extends React.Component {
     return parseInt(defaultValue !== undefined ? defaultValue : data.defaultValue, 10);
   }
 
-  onChangeValue(e) {
+  onChangeValue = (e) => {
     this.setState({ value: e.target.value });
-  }
+  };
 
   render() {
     let hidden_props = {};
@@ -1178,20 +1104,14 @@ class Range extends React.Component {
 
     return (
       <RfbItem
+        data={this.props.data}
         style={this.props.style}
+        mutable={this.props.mutable}
         className={this.props.className}
+        editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
-        pageBreakBefore={this.props.data.pageBreakBefore}
       >
-        {!this.props.mutable &&
-        <div>
-          {this.props.data.pageBreakBefore &&
-          <div className="preview-page-break">Page Break</div>
-          }
-          <HeaderBar editModeOn={this.props.editModeOn} data={this.props.data} onDestroy={this.props._onDestroy} static={this.props.data.static} required={this.props.data.required} />
-        </div>
-        }
         <div className="form-group">
           <label>
             <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
@@ -1238,6 +1158,7 @@ export {
   Checkboxes,
   DatePicker,
   RadioButtons,
+  Annotation,
   Image,
   Rating,
   Dropdown,

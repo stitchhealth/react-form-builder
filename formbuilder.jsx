@@ -7,13 +7,11 @@ export default class FormBuilder extends React.Component {
     this.state = {
       value: [],
     };
-
-    this.onChange = this.onChange.bind(this);
   }
 
-  onChange(value) {
+  onChange = (value) => {
     this.setState({ value });
-  }
+  };
 
   render() {
     return (

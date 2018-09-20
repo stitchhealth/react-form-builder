@@ -6,13 +6,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { EventEmitter } from 'fbemitter';
 import FormValidator from './form-validator';
-import { Camera, Checkboxes, DatePicker, Download, Dropdown, Header, HyperLink, Image, Label, LineBreak, NumberInput, Paragraph, RadioButtons, Range, Rating, Signature, TextArea, TextInput } from './form-elements';
+import { Annotation, Camera, Checkboxes, DatePicker, Download, Dropdown, Header, HyperLink, Image, Label, LineBreak, NumberInput, Paragraph, RadioButtons, Range, Rating, Signature, TextArea, TextInput } from './form-elements';
 
 export default class FormGenerator extends React.Component {
   constructor(props) {
     super(props);
     this.emitter = new EventEmitter();
-    this.getFormData = this.getFormData.bind(this);
   }
 
   _checkboxesDefaultValue(item, answer_data = this.props.answer_data) {
@@ -80,7 +79,7 @@ export default class FormGenerator extends React.Component {
 
   }
 
-  getFormData(validate = true) {
+  getFormData = (validate = true) => {
     const $form = $(ReactDOM.findDOMNode(this.refs.form));
 
     const answer_data = {};
@@ -97,7 +96,7 @@ export default class FormGenerator extends React.Component {
     }
 
     return { valid: errors.length === 0, errors: errors, data: answer_data };
-  }
+  };
 
   validateForm(answer_data) {
     let errors = [];
@@ -118,6 +117,7 @@ export default class FormGenerator extends React.Component {
 
   render() {
     let data_items = this.props.data;
+    let read_only = this.props.read_only;
 
     data_items.forEach((item) => {
       if (item.readOnly && item.variableKey && this.props.variables[item.variableKey]) {
@@ -126,43 +126,47 @@ export default class FormGenerator extends React.Component {
     });
 
     let items = data_items.map(item => {
+      const key = `form_${item.id}`;
+
       switch (item.element) {
         case 'Header':
-          return <Header mutable={true} key={`form_${item.id}`} data={item} />;
+          return <Header key={key} data={item} />;
         case 'Paragraph':
-          return <Paragraph mutable={true} key={`form_${item.id}`} data={item} />;
+          return <Paragraph key={key} data={item} />;
         case 'Label':
-          return <Label mutable={true} key={`form_${item.id}`} data={item} />;
+          return <Label key={key} data={item} />;
         case 'LineBreak':
-          return <LineBreak mutable={true} key={`form_${item.id}`} data={item} />;
+          return <LineBreak key={key} data={item} />;
         case 'TextInput':
-          return <TextInput ref={item.field_name} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} read_only={this.props.read_only} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <TextInput ref={item.field_name} key={key} data={item} read_only={read_only} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'NumberInput':
-          return <NumberInput ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <NumberInput ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'TextArea':
-          return <TextArea ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <TextArea ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Dropdown':
-          return <Dropdown ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <Dropdown ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Checkboxes':
-          return <Checkboxes ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this._checkboxesDefaultValue(item)} />;
+          return <Checkboxes ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this._checkboxesDefaultValue(item)} />;
         case 'DatePicker':
-          return <DatePicker ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <DatePicker ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'RadioButtons':
-          return <RadioButtons ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <RadioButtons ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Rating':
-          return <Rating ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <Rating ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Image':
-          return <Image ref={item.field_name} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <Image ref={item.field_name} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+        case 'Annotation':
+          return <Annotation ref={item.field_name} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Signature':
-          return <Signature ref={item.field_name} read_only={this.props.read_only || item.readOnly} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <Signature ref={item.field_name} read_only={this.props.read_only || item.readOnly} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'HyperLink':
-          return <HyperLink mutable={true} key={`form_${item.id}`} data={item} />;
+          return <HyperLink key={key} data={item} />;
         case 'Download':
-          return <Download download_path={this.props.download_path} mutable={true} key={`form_${item.id}`} data={item} />;
+          return <Download download_path={this.props.download_path} key={key} data={item} />;
         case 'Camera':
-          return <Camera ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <Camera ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'Range':
-          return <Range ref={item.field_name} read_only={this.props.read_only} handleChange={this.handleChange} mutable={true} key={`form_${item.id}`} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
+          return <Range ref={item.field_name} read_only={read_only} key={key} data={item} defaultValue={this.props.answer_data[item.field_name]} />;
       }
     });
 
