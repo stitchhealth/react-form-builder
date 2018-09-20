@@ -46,6 +46,19 @@ class RfbItem extends React.Component {
   }
 }
 
+class RfbLabel extends React.Component {
+  render() {
+    const required = this.props.required === true && !this.props.read_only;
+
+    return (
+      <label className="form-label">
+        <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.label) }} />
+        {required && <span className="label-required label label-danger">Required</span>}
+      </label>
+    );
+  }
+}
+
 @sortable
 class Header extends React.Component {
   render() {
@@ -156,13 +169,10 @@ class TextInput extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           <input {...props} />
         </div>
       </RfbItem>
@@ -198,13 +208,10 @@ class NumberInput extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           <input {...props} />
         </div>
       </RfbItem>
@@ -239,12 +246,10 @@ class TextArea extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           <textarea {...props} />
         </div>
       </RfbItem>
@@ -336,12 +341,10 @@ class DatePicker extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           <div>
             {this.props.read_only || this.props.data.readOnly ? (
               <input
@@ -603,12 +606,10 @@ class Signature extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
 
           {!this.props.read_only &&
           <div>
@@ -706,12 +707,10 @@ class Dropdown extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           <Select {...props} />
           {this.props.mutable && !this.props.read_only && (<input {...hidden_props} />)}
         </div>
@@ -737,12 +736,10 @@ class Checkboxes extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label className="form-label">
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           {this.props.data.options.map(function(option) {
             let this_key = 'preview_' + option.key;
             let props = {};
@@ -784,12 +781,10 @@ class RadioButtons extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label className="form-label">
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           {this.props.data.options.map(function(option) {
             let this_key = 'preview_' + option.key;
             let props = {};
@@ -855,6 +850,10 @@ class Annotation extends React.Component {
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
       >
+        <RfbLabel
+          label={this.props.data.label}
+          required={this.props.data.required}
+          read_only={this.props.read_only} />
         Test
       </RfbItem>
     );
@@ -885,12 +884,10 @@ class Rating extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           <StarRating {...props} />
         </div>
       </RfbItem>
@@ -995,14 +992,11 @@ class Camera extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           <div className="image-upload-container">
-
             {!this.props.read_only && !this.state.value &&
             <div>
               <input type="file" accept="image/*" capture="camera" className="image-upload" onChange={this.displayImage} />
@@ -1113,12 +1107,10 @@ class Range extends React.Component {
         onTouchStart={this.props.onTouchStart}
       >
         <div className="form-group">
-          <label>
-            <span dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.label) }} />
-            {(this.props.data.hasOwnProperty('required') && this.props.data.required === true && !this.props.read_only) &&
-            <span className="label-required label label-danger">Required</span>
-            }
-          </label>
+          <RfbLabel
+            label={this.props.data.label}
+            required={this.props.data.required}
+            read_only={this.props.read_only} />
           <div className="range">
             <div className="clearfix">
               <span className="pull-left">{this.props.data.min_label}</span>

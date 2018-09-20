@@ -11,6 +11,7 @@ export default new xss.FilterXSS({
     ul: ['style', 'class'],
     li: ['style', 'class'],
     p: ['style', 'class'],
+    ins: ['style', 'class'],
     sub: ['style', 'class'],
     sup: ['style', 'class'],
     div: ['style', 'class'],
