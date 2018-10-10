@@ -18,6 +18,7 @@ module.exports = [{
     //but get it from a global 'React' variable
     'react': 'react',
     'react-dom': 'react-dom',
+    'react-quill': 'react-quill',
     'classnames': 'classnames',
     'jquery': 'jquery',
     'bootstrap': 'bootstrap',

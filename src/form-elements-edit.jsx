@@ -2,18 +2,7 @@ import React from 'react';
 import DynamicOptionList from './dynamic-option-list';
 import TextAreaAutosize from 'react-textarea-autosize';
 
-import { ContentState, convertFromHTML, convertToRaw, EditorState } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import { Editor } from 'react-draft-wysiwyg';
-
-let toolbar = {
-  options: ['inline', 'list', 'textAlign', 'fontSize', 'link', 'history'],
-  inline: {
-    inDropdown: false,
-    className: undefined,
-    options: ['bold', 'italic', 'underline', 'superscript', 'subscript'],
-  },
-};
+import ReactQuill from 'react-quill';
 
 export default class FormElementsEdit extends React.Component {
   constructor(props) {
@@ -42,9 +31,8 @@ export default class FormElementsEdit extends React.Component {
   }
 
   onEditorStateChange(index, property, editorContent) {
-    let html = draftToHtml(convertToRaw(editorContent.getCurrentContent())).replace(/<p>/g, '<div>').replace(/<\/p>/g, '</div>');
     let this_element = this.state.element;
-    this_element[property] = html;
+    this_element[property] = editorContent;
 
     this.setState({
       element: this_element,
@@ -101,16 +89,12 @@ export default class FormElementsEdit extends React.Component {
 
     if (this.props.element.hasOwnProperty('content')) {
       const isEmpty = this.props.element.content.trim() === '<div></div>';
-      const content = isEmpty ? '<div>Type...</div>' : this.props.element.content;
-      const contentState = ContentState.createFromBlockArray(convertFromHTML(content));
-      var editorState = EditorState.createWithContent(contentState);
+      var content = isEmpty ? '<div>Type...</div>' : this.props.element.content;
     }
 
     if (this.props.element.hasOwnProperty('label')) {
       const isEmpty = this.props.element.label.trim() === '<div></div>';
-      const content = isEmpty ? '<div>Type...</div>' : this.props.element.label;
-      const contentState = ContentState.createFromBlockArray(convertFromHTML(content));
-      var editorState = EditorState.createWithContent(contentState);
+      var content = isEmpty ? '<div>Type...</div>' : this.props.element.label;
     }
 
     return (
@@ -119,11 +103,11 @@ export default class FormElementsEdit extends React.Component {
         <div className="form-group">
           <label className="control-label">Text to display:</label>
 
-          <Editor
-            toolbar={toolbar}
-            defaultEditorState={editorState}
-            onBlur={this.updateElement.bind(this)}
-            onEditorStateChange={this.onEditorStateChange.bind(this, 0, 'content')} />
+          <ReactQuill
+            className="ql-input"
+            value={content}
+            onChange={this.onEditorStateChange.bind(this, 0, 'content')}
+          />
         </div>
         }
         {this.props.element.hasOwnProperty('file_path') &&
@@ -145,11 +129,11 @@ export default class FormElementsEdit extends React.Component {
         {this.props.element.hasOwnProperty('label') &&
         <div className="form-group">
           <label>Display Label</label>
-          <Editor
-            toolbar={toolbar}
-            defaultEditorState={editorState}
-            onBlur={this.updateElement.bind(this)}
-            onEditorStateChange={this.onEditorStateChange.bind(this, 0, 'label')} />
+          <ReactQuill
+            className="ql-input"
+            value={content}
+            onChange={this.onEditorStateChange.bind(this, 0, 'label')}
+          />
 
           <br />
           <div className="checkbox">
