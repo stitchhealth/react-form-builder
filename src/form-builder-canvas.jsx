@@ -188,5 +188,5 @@ FormBuilderCanvas.defaultProps = {
   files: [],
   showCorrectColumn: false,
   onChange: () => undefined,
-  className: 'rfbp pull-left',
+  className: 'rfbp',
 };

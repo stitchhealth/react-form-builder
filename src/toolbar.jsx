@@ -4,6 +4,7 @@
 
 import React from 'react';
 import uuid from 'uuid/v4';
+import { Sticky } from 'react-sticky';
 import ToolbarItem from './toolbar-item';
 import ElementActions from './actions/ElementActions';
 
@@ -267,8 +268,29 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
+    if (this.props.isSticky) {
+      return (
+        <div className="rfbt">
+          <Sticky relative={true}>
+            {({style, isSticky}) => (
+              <div style={style} className={isSticky ? 'rfbt__inner--sticky' : ''}>
+                <h4>Toolbox</h4>
+                <ul>
+                  {
+                    this.state.items.map(item => {
+                      return <ToolbarItem data={item} key={item.key} onClick={this._onClick.bind(this, item)} />;
+                    })
+                  }
+                </ul>
+              </div>
+            )}
+          </Sticky>
+        </div>
+      );
+    }
+
     return (
-      <div className="rfbt pull-right">
+      <div className="rfbt">
         <h4>Toolbox</h4>
         <ul>
           {

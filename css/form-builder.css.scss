@@ -1,4 +1,7 @@
 .rfbb {
+  display: flex;
+  flex-direction: row;
+
   .rfbp {
     position: relative;
     width: 78%;
@@ -284,6 +287,7 @@
 
 @media (max-width: $screen-sm-min) {
   .rfbb {
+    display: block;
     position: relative;
 
     .rfbp {

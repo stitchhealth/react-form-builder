@@ -8,7 +8,9 @@ import FormBuilderCanvas from './form-builder-canvas';
 
 export default class FormBuilder extends React.Component {
   render() {
-    let toolbarProps = {};
+    let toolbarProps = {
+      isSticky: this.props.isSticky
+    };
     if (this.props.toolbarItems) {
       toolbarProps.items = this.props.toolbarItems;
     }
@@ -26,16 +28,14 @@ export default class FormBuilder extends React.Component {
 
     return (
       <div className="rfbw">
-        <div className="rfbb clearfix">
-          <div>
-            <FormBuilderCanvas
-              value={value}
-              onChange={onChange}
-              files={this.props.files}
-              variables={this.props.variables}
-              showCorrectColumn={this.props.showCorrectColumn} />
-            <Toolbar {...toolbarProps} />
-          </div>
+        <div className="rfbb">
+          <FormBuilderCanvas
+            value={value}
+            onChange={onChange}
+            files={this.props.files}
+            variables={this.props.variables}
+            showCorrectColumn={this.props.showCorrectColumn} />
+          <Toolbar {...toolbarProps} />
         </div>
       </div>
     );

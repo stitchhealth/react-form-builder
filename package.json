@@ -59,6 +59,7 @@
     "react-select": "^2.0.0",
     "react-signature-pad": "^0.0.6",
     "react-sortable-items": "^0.0.12",
+    "react-sticky": "^6.0.3",
     "react-textarea-autosize": "^7.0.4",
     "reflux": "^0.2.8",
     "sass-loader": "^6.0.6",
