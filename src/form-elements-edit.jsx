@@ -4,6 +4,18 @@ import TextAreaAutosize from 'react-textarea-autosize';
 
 import ReactQuill from 'react-quill';
 
+const QUILL_TOOLBAR_OPTIONS = [
+  [{ 'size': [] }],
+  [{ 'color': [] }, { 'background': [] }],
+  ['bold', 'italic', 'underline'],
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'align': [] }]
+];
+
+const QUILL_FORMATS = [
+  'size', 'color', 'background', 'bold', 'italic', 'underline', 'list', 'align'
+]
+
 export default class FormElementsEdit extends React.Component {
   constructor(props) {
     super(props);
@@ -104,6 +116,8 @@ export default class FormElementsEdit extends React.Component {
           <label className="control-label">Text to display:</label>
 
           <ReactQuill
+            modules={{ toolbar: QUILL_TOOLBAR_OPTIONS }}
+            formats={QUILL_FORMATS}
             className="ql-input"
             value={content}
             onChange={this.onEditorStateChange.bind(this, 0, 'content')}
@@ -130,6 +144,8 @@ export default class FormElementsEdit extends React.Component {
         <div className="form-group">
           <label>Display Label</label>
           <ReactQuill
+            modules={{ toolbar: QUILL_TOOLBAR_OPTIONS }}
+            formats={QUILL_FORMATS}
             className="ql-input"
             value={content}
             onChange={this.onEditorStateChange.bind(this, 0, 'label')}

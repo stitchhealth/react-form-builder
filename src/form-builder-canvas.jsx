@@ -4,6 +4,7 @@
 
 import React from 'react';
 import Sortable from 'react-anything-sortable';
+import cx from 'classnames';
 import ElementStore from './stores/ElementStore';
 import ElementActions from './actions/ElementActions';
 import FormElementsEdit from './form-elements-edit';
@@ -101,10 +102,9 @@ export default class FormBuilderCanvas extends React.Component {
 
   render() {
     const { value } = this.props;
-    let classes = this.props.className;
-    if (this.state.editMode) {
-      classes += ' is-editing';
-    }
+    let classes = cx(this.props.className, 'ql-editor', 'rfbc', {
+      'is-editing': this.state.editMode
+    });
 
     const items = value.map(item => {
       switch (item.element) {
