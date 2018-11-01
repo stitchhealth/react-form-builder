@@ -5,8 +5,11 @@
 import React from 'react';
 import uuid from 'uuid/v4';
 import { Sticky } from 'react-sticky';
+import cx from 'classnames';
 import ToolbarItem from './toolbar-item';
 import ElementActions from './actions/ElementActions';
+import ElementStore from './stores/ElementStore';
+import historyStack from './stores/HistoryStack';
 
 export default class Toolbar extends React.Component {
   constructor(props) {
@@ -16,7 +19,32 @@ export default class Toolbar extends React.Component {
 
     this.state = {
       items: items,
+      hasUndo: false,
+      hasRedo: false
     };
+
+    ElementStore.listen(this.checkUndoStatus);
+  }
+
+  checkUndoStatus = () => {
+    this.setState({
+      hasUndo: historyStack.hasUndo,
+      hasRedo: historyStack.hasRedo
+    });
+  }
+
+  undo = () => {
+    const data = historyStack.undo();
+    if (data) {
+      ElementStore.load(data);
+    }
+  }
+
+  redo = () => {
+    const data = historyStack.redo();
+    if (data) {
+      ElementStore.load(data);
+    }
   }
 
   _defaultItemOptions(element) {
@@ -275,6 +303,39 @@ export default class Toolbar extends React.Component {
     ElementActions.createElement(elementOptions);
   }
 
+  renderContent() {
+    return (
+      <ul>
+        {
+          this.state.items.map(item => {
+            return <ToolbarItem data={item} key={item.key} onClick={this._onClick.bind(this, item)} />;
+          })
+        }
+      </ul>
+    );
+  }
+
+  renderTop() {
+    const { hasRedo, hasUndo } = this.state;
+    const undoCN = cx('btn', 'btn-default', 'rfbt__top-btn', {
+      'rfbt__top-btn--disabled': !hasUndo
+    });
+    const redoCN = cx('btn', 'btn-default', 'rfbt__top-btn', {
+      'rfbt__top-btn--disabled': !hasRedo
+    });
+
+    return (
+      <div className="rfbt__top">
+        <button disabled={!hasUndo} type="button" onClick={this.undo} className={undoCN}>
+         <i className="fa fa-undo" /> Undo
+        </button>
+        <button disabled={!hasRedo} type="button" onClick={this.redo} className={redoCN}>
+          <i className="fa fa-rotate-right" /> Redo
+        </button>
+      </div>
+    )
+  }
+
   render() {
     if (this.props.isSticky) {
       return (
@@ -283,13 +344,8 @@ export default class Toolbar extends React.Component {
             {({style, isSticky}) => (
               <div style={style} className={isSticky ? 'rfbt__inner--sticky' : ''}>
                 <h4>Toolbox</h4>
-                <ul>
-                  {
-                    this.state.items.map(item => {
-                      return <ToolbarItem data={item} key={item.key} onClick={this._onClick.bind(this, item)} />;
-                    })
-                  }
-                </ul>
+                {this.renderTop()}
+                {this.renderContent()}
               </div>
             )}
           </Sticky>
@@ -300,13 +356,8 @@ export default class Toolbar extends React.Component {
     return (
       <div className="rfbt">
         <h4>Toolbox</h4>
-        <ul>
-          {
-            this.state.items.map(item => {
-              return <ToolbarItem data={item} key={item.key} onClick={this._onClick.bind(this, item)} />;
-            })
-          }
-        </ul>
+        {this.renderTop()}
+        {this.renderContent()}
       </div>
     );
   }

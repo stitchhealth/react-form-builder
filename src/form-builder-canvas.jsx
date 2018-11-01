@@ -65,6 +65,8 @@ export default class FormBuilderCanvas extends React.Component {
 
   manualEditModeOff = () => {
     if (this.state.editMode) {
+      this.updateElement(this.state.editElement);
+
       this.setState({
         editMode: false,
         editElement: null,
