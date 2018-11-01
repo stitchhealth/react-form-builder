@@ -7,7 +7,7 @@ const THROTTLE_MS = 1000;
 /**
  * Stores history over time and allows undo & redo
  */
-class HistoryStack {
+export default class HistoryStack {
   history = []
   pointer = -1;
 
@@ -68,5 +68,3 @@ class HistoryStack {
     return JSON.parse(data);
   }
 }
-
-export default new HistoryStack();

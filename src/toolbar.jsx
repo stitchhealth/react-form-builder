@@ -9,13 +9,14 @@ import cx from 'classnames';
 import ToolbarItem from './toolbar-item';
 import ElementActions from './actions/ElementActions';
 import ElementStore from './stores/ElementStore';
-import historyStack from './stores/HistoryStack';
+import HistoryStack from './stores/HistoryStack';
 
 export default class Toolbar extends React.Component {
   constructor(props) {
     super(props);
 
     var items = (this.props.items) ? this.props.items : this._defaultItems();
+    this.historyStack = new HistoryStack();
 
     this.state = {
       items: items,
@@ -28,20 +29,20 @@ export default class Toolbar extends React.Component {
 
   checkUndoStatus = () => {
     this.setState({
-      hasUndo: historyStack.hasUndo,
-      hasRedo: historyStack.hasRedo
+      hasUndo: this.historyStack.hasUndo,
+      hasRedo: this.historyStack.hasRedo
     });
   }
 
   undo = () => {
-    const data = historyStack.undo();
+    const data = this.historyStack.undo();
     if (data) {
       ElementStore.load(data);
     }
   }
 
   redo = () => {
-    const data = historyStack.redo();
+    const data = this.historyStack.redo();
     if (data) {
       ElementStore.load(data);
     }
