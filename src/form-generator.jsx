@@ -137,6 +137,7 @@ export default class FormGenerator extends React.Component {
           return <Label key={key} mutable={true} data={item} />;
         case 'LineBreak':
           return <LineBreak key={key} mutable={true} data={item} />;
+        case 'Other':
         case 'TextInput':
           return <TextInput ref={item.field_name} key={key} mutable={true} data={item} read_only={read_only} defaultValue={this.props.answer_data[item.field_name]} />;
         case 'NumberInput':

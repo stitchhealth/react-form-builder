@@ -13,6 +13,7 @@ export default class HeaderBar extends React.Component {
           {this.props.data.element !== 'LineBreak' &&
           <div className="btn is-isolated btn-school" onClick={(e) => this.props.editModeOn(this.props.data, e)}><i className="is-isolated fa fa-pencil-square-o"></i></div>
           }
+          <div className="btn is-isolated btn-school" onClick={(e) => this.props.onClone(this.props.data, e)}><i className="is-isolated fa fa-clone"></i></div>
           <div className="btn is-isolated btn-school" onClick={(e) => this.props.onDestroy(this.props.data, e)}><i className="is-isolated fa fa-trash"></i></div>
         </div>
       </div>

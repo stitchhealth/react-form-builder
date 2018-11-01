@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import uuid from 'uuid/v4';
 import Sortable from 'react-anything-sortable';
 import cx from 'classnames';
 import ElementStore from './stores/ElementStore';
@@ -48,6 +49,19 @@ export default class FormBuilderCanvas extends React.Component {
       this.manualEditModeOff();
     }
   };
+
+  _onClone = (element) => {
+    const { value } = this.props;
+    const index = value.findIndex(item => item.id === element.id);
+    let newArray = [...value];
+    const newElement = {
+      ...element,
+      id: uuid()
+    }
+
+    newArray.splice(index + 1, 0, newElement)
+    ElementActions.updateElements(newArray);
+  }
 
   manualEditModeOff = () => {
     if (this.state.editMode) {
@@ -107,45 +121,55 @@ export default class FormBuilderCanvas extends React.Component {
     });
 
     const items = value.map(item => {
+      const itemProps = {
+        mutable: false,
+        editModeOn: this.editModeOn,
+        key: item.id,
+        sortData: item.id,
+        onClone: this._onClone,
+        data: item
+      };
+
       switch (item.element) {
         case 'Header':
-          return <Header mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Header {...itemProps} />;
         case 'Paragraph':
-          return <Paragraph mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Paragraph {...itemProps} />;
         case 'Label':
-          return <Label mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Label {...itemProps} />;
         case 'LineBreak':
-          return <LineBreak mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <LineBreak {...itemProps} />;
         case 'TextInput':
-          return <TextInput mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+        case 'Other':
+          return <TextInput {...itemProps} />;
         case 'NumberInput':
-          return <NumberInput mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <NumberInput {...itemProps} />;
         case 'TextArea':
-          return <TextArea mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <TextArea {...itemProps} />;
         case 'Dropdown':
-          return <Dropdown mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Dropdown {...itemProps} />;
         case 'Checkboxes':
-          return <Checkboxes mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Checkboxes {...itemProps} />;
         case 'DatePicker':
-          return <DatePicker mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <DatePicker {...itemProps} />;
         case 'RadioButtons':
-          return <RadioButtons mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <RadioButtons {...itemProps} />;
         case 'Rating':
-          return <Rating mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Rating {...itemProps} />;
         case 'Image':
-          return <Image mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Image {...itemProps} />;
         case 'Annotation':
-          return <Annotation mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Annotation {...itemProps} />;
         case 'Signature':
-          return <Signature mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Signature {...itemProps} />;
         case 'HyperLink':
-          return <HyperLink mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <HyperLink {...itemProps} />;
         case 'Download':
-          return <Download mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Download {...itemProps} />;
         case 'Camera':
-          return <Camera mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Camera {...itemProps} />;
         case 'Range':
-          return <Range mutable={false} editModeOn={this.editModeOn} key={item.id} sortData={item.id} data={item} />;
+          return <Range {...itemProps} />;
       }
     });
 

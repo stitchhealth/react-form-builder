@@ -25,6 +25,7 @@ class RfbItem extends React.Component {
       className = '',
       mutable = true,
       editModeOn = () => null,
+      onClone = () => null,
       ...props
     } = this.props;
 
@@ -38,7 +39,7 @@ class RfbItem extends React.Component {
         {!mutable &&
         <div>
           {data.pageBreakBefore && <div className="preview-page-break">Page Break</div>}
-          <HeaderBar editModeOn={editModeOn} data={data} onDestroy={this._onDestroy} static={data.static} required={data.required} />
+          <HeaderBar editModeOn={editModeOn} data={data} onDestroy={this._onDestroy} onClone={onClone} static={data.static} required={data.required} />
         </div>
         }
         {children}
@@ -74,6 +75,7 @@ class Header extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <h3 className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
@@ -95,6 +97,7 @@ class Paragraph extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <p className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
@@ -116,6 +119,7 @@ class Label extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <label className={classNames} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
       </RfbItem>
@@ -135,6 +139,7 @@ class LineBreak extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <hr />
       </RfbItem>
@@ -168,6 +173,7 @@ class TextInput extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -207,6 +213,7 @@ class NumberInput extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -245,6 +252,7 @@ class TextArea extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -340,6 +348,7 @@ class DatePicker extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -606,6 +615,7 @@ class Signature extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -707,6 +717,7 @@ class Dropdown extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -736,6 +747,7 @@ class Checkboxes extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -781,6 +793,7 @@ class RadioButtons extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -829,6 +842,7 @@ class Image extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         {this.props.data.src ?
           <img src={this.props.data.src} width={this.props.data.width} height={this.props.data.height} style={{ maxWidth: '100%' }} /> :
@@ -989,6 +1003,7 @@ class Annotation extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -1057,6 +1072,7 @@ class Rating extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -1082,6 +1098,7 @@ class HyperLink extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <a target="_blank" href={this.props.data.href} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
@@ -1103,6 +1120,7 @@ class Download extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <a href={this.props.download_path + '?id=' + this.props.data.file_path} dangerouslySetInnerHTML={{ __html: myxss.process(this.props.data.content) }} />
@@ -1165,6 +1183,7 @@ class Camera extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
@@ -1280,6 +1299,7 @@ class Range extends React.Component {
         editModeOn={this.props.editModeOn}
         onMouseDown={this.props.onMouseDown}
         onTouchStart={this.props.onTouchStart}
+        onClone={this.props.onClone}
       >
         <div className="form-group">
           <RfbLabel
